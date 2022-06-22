@@ -4,3 +4,5 @@ google-auth-oauthlib >= 0.5.2
 gspread >= 5.4.0
 base64
 os
+requests
+date
