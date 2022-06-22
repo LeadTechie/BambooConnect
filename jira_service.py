@@ -11,7 +11,9 @@ apikey = os.getenv('RECON_TOOLS_JIRA_TOKEN')
 #https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
 server = os.getenv('RECON_TOOLS_JIRA_SERVER')
 
-
+#https://community.atlassian.com/t5/Jira-questions/How-to-use-API-token-for-REST-calls-in-Python/qaq-p/760940
+#https://developer.atlassian.com/server/jira/platform/jira-rest-api-examples/
+#https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-attachments/#api-rest-api-3-issue-issueidorkey-attachments-post
 def testJIRAaccess1():
     options = {
      'server': server
