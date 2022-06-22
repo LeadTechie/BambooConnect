@@ -53,21 +53,11 @@ def testJIRAaccess2():
 def parseComponentsJSON(components):
     results = []
     for component in components:
-        if 'lead' in component:
-            lead = component['lead']['displayName']
-        else:
-            lead = "<No Owner>"
-        # Ruby syntax is nicer! hash['description']?hash['description']:'<No Description>'
-        if 'description' in component:
-            description = component['description']
-        else:
-            description = "<No Description>",
-
         results.append( [ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             component["id"],
             component["name"],
-            lead,
-            description
+            component['lead']['displayName'] if 'lead' in component else "<No Owner>",
+            component['description'] if 'description' in component else "<No Description>"
             ])
     return results
 
