@@ -1,1 +1,4 @@
 pandas >= 1.4.2
+google_spreadsheet >= 0.0.6
+google-auth-oauthlib >= 0.5.2
+gspread >= 5.4.0
