@@ -26,20 +26,13 @@ with open('../credentials.json') as jsonfile:
     print(base64.b64decode(encoded).decode('ascii'))
     print()
 
-stringIn = os.getenv('CREDENTIALS_JSON')
-print()
-print("CREDENTIALS_JSON as encode('ascii')")
-print()
-print(stringIn.encode('ascii'))
-print()
+    # Environment variables only set for scope of while script is running
+    # so need to do a export CREDENTIALS_JSON=" ... " text from above
+    os.environ['CREDENTIALS_JSON'] = encoded.decode('ascii')
 
-print()
-print('CREDENTIALS_JSON as string')
-print()
-print(stringIn)
-print()
-
-print('CREDENTIALS_JSON decoded')
-print()
-print(base64.b64decode(stringIn).decode('ascii'))
-print()
+    stringIn = os.getenv('CREDENTIALS_JSON')
+    print()
+    print('CREDENTIALS_JSON as string')
+    print()
+    print(stringIn)
+    print()
