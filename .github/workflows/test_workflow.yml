@@ -29,4 +29,6 @@ jobs:
           RECON_TOOLS_JIRA_EMAIL: ${{ secrets.RECON_TOOLS_JIRA_EMAIL }}
           RECON_TOOLS_JIRA_SERVER: ${{ secrets.RECON_TOOLS_JIRA_SERVER }}
           RECON_TOOLS_JIRA_TOKEN: ${{ secrets.RECON_TOOLS_JIRA_TOKEN }}
-        run: python test.py
+        run: 
+          python test.py
+          python jira_service.py
