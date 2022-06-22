@@ -17,7 +17,7 @@ output = df.sort_values(by = "a")
 print(output)
 
 credentialsb64 = os.getenv('CREDENTIALS_JSON')
-credentials = base64.b64decode(credentialsb64).decode('ascii')
+credentials = base64.b64decode(credentialsb64)#.decode('ascii')
 print(credentials)
 print()
 json_credentials = json.loads(credentials)
