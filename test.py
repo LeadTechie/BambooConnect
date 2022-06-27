@@ -30,3 +30,6 @@ gc = gspread.service_account_from_dict(json_credentials)
 sh = gc.open("Recon Tools Test Data")
 
 print(sh.sheet1.get('A1'))
+
+
+#"Recon Tools Test Data", 0, 1, 5, 2, false, true, "../credentials.json", "leadtechie", "TEST", 1, 5
