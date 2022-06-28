@@ -74,15 +74,15 @@ class Jira_Connector:
 
     def test_jira_wrapper_access(self, ticket_name):
         options = {
-         'server': self.server
+            'server': self.server
         }
 
-        jira = JIRA(options, basic_auth=(self.user,self.apikey) )
+        jira = JIRA(options, basic_auth=(self.user,self.apikey))
 
         ticket = ticket_name
         issue = jira.issue(ticket)
 
         summary = issue.fields.summary
 
-        print('ticket: ', ticket, summary)
+        #print('ticket: ', ticket, summary)
         return summary
