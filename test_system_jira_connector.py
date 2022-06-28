@@ -87,6 +87,11 @@ class Test_System_Jira_Connector(unittest.TestCase):
         #new_filtered_list = jc.parse_components(full_components_from_jira, '2022-06-27 22:34:09')
         self.assertEqual(full_components_from_jira, full_jira_component_json)
 
+    def test_test_jira_wrapper_access(self):
+        jc = Jira_Connector()
+        jc.initialse_auth()
+        ticket_description = jc.test_jira_wrapper_access("TEST-3")
+        self.assertEqual(ticket_description, "Test Bug 2")
 
 if __name__ == '__main__':
     unittest.main()
