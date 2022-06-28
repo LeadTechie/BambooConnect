@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-from jira_connector import Jira_Connector
+from connectors.jira_connector import Jira_Connector
 
 class Test_Unit_Jira_Connector(unittest.TestCase):
 
