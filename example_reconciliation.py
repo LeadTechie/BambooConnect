@@ -30,10 +30,9 @@ def get_external_data():
     jiradf.to_csv('jiradf.csv', encoding='utf-8')
 
 def print_datasets(sheetdf, jiradf):
-    print("sheetdf")
-    print("")
-    print(sheetdf)
-    print("")
+    print_dataset(sheetdf, "sheetdf")
+    print_dataset(jiradf, "jiradf")
+
 
 def print_dataset(df, name):
     print(name)
@@ -45,21 +44,58 @@ def get_local_data():
     sheetdf = pd.read_csv('sheetdf.csv', encoding='utf-8')
     jiradf = pd.read_csv('jiradf.csv', encoding='utf-8')
 
+    # remove header row
+    sheetdf = sheetdf.iloc[: , 1:]
+    jiradf = jiradf.iloc[: , 1:]
+
+
     new_header = sheetdf.iloc[0] #Get the first row for the header
     sheetdf = sheetdf[1:] #Take the data less the header row
-    sheetdf.columns = new_header #Set the header row as the df header
 
+    sheetdf.columns = new_header #Set the header row as the df header
     jiradf.columns = new_header
 
-    #Find Rows in DF1 Which Are Not Available in DF2
-    #https://kanoki.org/2019/07/04/pandas-difference-between-two-dataframes/
-    #df = df1.merge(df2, how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+    sheetdf['id']=sheetdf['id'].astype('object')
+    jiradf['id']=jiradf['id'].astype('object')
 
-    #df = sheetdf.merge(jiradf, on=['id'].astype(int), how = 'outer' ,indicator=True).loc[lambda x : x['_merge']=='left_only']
+    jiradf = jiradf.set_index('id', drop=True)
+    sheetdf = sheetdf.set_index('id', drop=True)
+    #jiradf.set_index('id', drop=False)
+    #sheetdf.set_index('id', drop=False)
+
+    jiradf.index = jiradf.index.astype('object')
+    sheetdf.index = sheetdf.index.astype('object')
+
+    sheetdf = sheetdf.drop(columns=['Time Stamp'])
+    jiradf = jiradf.drop(columns=['Time Stamp'])
+
+    print("Meta Data")
+    print(sheetdf.columns)
+    print(jiradf.columns)
+    print(sheetdf.dtypes)
+    print(jiradf.dtypes)
 
     print_datasets(sheetdf, jiradf)
+    #print(sheetdf.columns)
+    #print(jiradf.columns)
 
-    #print_dataset(df, "result")
+    print("changing column type")
+    #jiradf.astype({'id': 'object'})
+    #pd.to_numeric(jiradf["id"])
+    #pd.to_numeric(sheetdf["id"])
 
+    print("sheetdf.info()")
+    print(sheetdf.info())
 
+    print("jiradf.info()")
+    print(jiradf.info())
+
+    #https://moonbooks.org/Articles/How-to-replace-rows-of-a-dataframe-using-rows-of-another-dataframe-based-on-indexes-with-pandas-/
+
+    #https://stackoverflow.com/questions/51394653/update-a-pandas-dataframe-with-data-from-another-dataframe
+    df = sheetdf.combine_first(jiradf).reindex(jiradf.index)
+
+    print_dataset(df, "result")
+
+#get_external_data()
 get_local_data()
