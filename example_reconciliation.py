@@ -153,3 +153,35 @@ def get_local_data():
 #get_external_data()
 get_local_data()
 #update_cells_test()
+
+
+#Class Structure
+test = """
+
+
+
+Connector
+- Connector (JIRAComponent / GoogleSheetsSheet)
+- set_auth_details
+- set_query_details
+- clean_data
+- get_raw_data
+- get_clean_data
+
+DataProcessorsLibrary
+- cleanJIRAData(dataFrameIn): dataFrameOut
+
+ReconDatSet
+- PandaDataframe
+- Connector (auth_details, query_details)
+- get_data
+- save_local
+- load_local
+- data_as_dictionary
+
+Script
+- Create Data set
+- Initialise Auth and Query
+-
+
+"""

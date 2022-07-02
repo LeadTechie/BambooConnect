@@ -20,8 +20,7 @@ class Test_Unit_Jira_Connector(unittest.TestCase):
         jc = Jira_Connector()
         jc.initialse_auth()
         self.assertEqual(jc.get_jira_components_url("https://leadtechie.atlassian.net", "TEST"), "https://leadtechie.atlassian.net/rest/api/3/project/TEST/components")
-        self.assertEqual(jc.get_jira_components_default_url(), "https://leadtechie.atlassian.net/rest/api/3/project/TEST/components")
-
+        
 
     def test_parse_components(self):
         jc = Jira_Connector()

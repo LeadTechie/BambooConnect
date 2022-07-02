@@ -5,8 +5,6 @@ from connectors.jira_connector import Jira_Connector
 #import py_recon_tools.jira_connector.Jira_Connector
 
 class Test_System_Jira_Connector(unittest.TestCase):
-
-
     def test_get_components_from_jira(self):
         jc = Jira_Connector()
         full_jira_component_json = [
@@ -56,33 +54,10 @@ class Test_System_Jira_Connector(unittest.TestCase):
                 "projectId": 10000
             }
         ]
-        jira_filtered_component_json = [
-            [
-                "2022-06-27 22:34:09",
-                "10000",
-                "TestComponent1",
-                "<No Owner>",
-                "TestComponent1 Description"
-            ],
-            [
-                "2022-06-27 22:34:09",
-                "10001",
-                "TestComponent2",
-                "<No Owner>",
-                "TestComponent2 Description"
-            ],
-            [
-                "2022-06-27 22:34:09",
-                "10002",
-                "TestComponent3",
-                "Chris Rowe",
-                "TestComponent3 Description"
-            ]
-        ]
         os.environ['RECON_TOOLS_JIRA_EMAIL'] = 'leadtechie@gmail.com'
         os.environ['RECON_TOOLS_JIRA_SERVER'] = 'https://leadtechie.atlassian.net'
         jc.initialse_auth()
-        full_components_from_jira = jc.get_jira_components_json()
+        full_components_from_jira = jc.get_raw_data()
 
         #print(full_components_from_jira)
         #new_filtered_list = jc.parse_components(full_components_from_jira, '2022-06-27 22:34:09')
