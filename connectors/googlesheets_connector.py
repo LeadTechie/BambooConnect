@@ -18,6 +18,13 @@ class GoogleSheets_Connector:
         json_credentials = json.loads(credentials)
         self.gc = gspread.service_account_from_dict(json_credentials)
 
+
+    def update_cells(self, workbook_name, sheet_name, cell_ref, cells):
+        sh = self.gc.open(workbook_name)
+        worksheet = sh.worksheet(sheet_name)
+        #'A1:B2', [[1, 2], [3, 4]]
+        worksheet.update(cell_ref, cells)
+
     def get_cell(self, workbook_name, cell_ref):
         sh = self.gc.open(workbook_name)
         return sh.sheet1.get(cell_ref)

@@ -29,6 +29,11 @@ def get_external_data():
     sheetdf.to_csv('sheetdf.csv', encoding='utf-8')
     jiradf.to_csv('jiradf.csv', encoding='utf-8')
 
+def update_cells_test(start_cell = 'B1', data=[[1,1],[2,3]]):
+    gsc = GoogleSheets_Connector()
+    gsc.initialse_auth()
+    gsc.update_cells("Recon Tools Test Data","write-data-test",start_cell, data)
+
 def print_datasets(sheetdf, jiradf):
     print_dataset(sheetdf, "sheetdf")
     print_dataset(jiradf, "jiradf")
@@ -142,5 +147,9 @@ def get_local_data():
     print(sheetdf.dtypes)
     print_dataset(sheetdf, "result")
 
+    print(sheetdf.to_numpy().tolist())
+    update_cells_test("B1",sheetdf.to_numpy().tolist())
+
 #get_external_data()
 get_local_data()
+#update_cells_test()
