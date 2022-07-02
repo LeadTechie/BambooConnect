@@ -1,49 +1,51 @@
-from connectors.googlesheets_connector import GoogleSheets_Connector
-from connectors.jira_connector import Jira_Connector
 import pandas as pd
-import json
 import numpy as np
+import json
+from tabulate import tabulate
 
-def get_external_data():
-    gsc = GoogleSheets_Connector()
-    jc = Jira_Connector()
-    gsc.initialse_auth()
-    jc.initialse_auth()
-    all_cells= gsc.get_sheet("Recon Tools Test Data", "Sheet4")
-    #jc.get_jira_components_json()
-    jira_components = jc.parse_components_with_datetime_stamp()
+def test_first():
+    #print(pd.read_csv('sheetdf.csv', encoding='utf-8').to_numpy().tolist())
 
-    sheetdf = pd.DataFrame.from_dict(all_cells)
-    jiradf = pd.DataFrame.from_dict(jira_components)
-
-    print("sheetdf")
-    print("")
-    print(sheetdf)
-    print("")
-
-    print("jiradf")
-    print("")
-    print(jiradf)
-    print("")
-
-    sheetdf.to_csv('sheetdf.csv', encoding='utf-8')
-    jiradf.to_csv('jiradf.csv', encoding='utf-8')
-
-def update_cells_test(start_cell = 'B1', data=[[1,1],[2,3]]):
-    gsc = GoogleSheets_Connector()
-    gsc.initialse_auth()
-    gsc.update_cells("Recon Tools Test Data","write-data-test",start_cell, data)
-
-def print_datasets(sheetdf, jiradf):
-    print_dataset(sheetdf, "sheetdf")
-    print_dataset(jiradf, "jiradf")
+    return "test_first_data_translations"
 
 
-def print_dataset(df, name):
-    print(name)
-    print("")
-    print(df)
-    print("")
+def make_first_row_header(df):
+    new_header = df.iloc[0] #Get the first row for the header
+    df.columns = new_header
+    df = df[1:] # remove the header row from the data
+    return df
+
+def process_component_sheets_data(df):
+    df = make_first_row_header(df)
+    df['id']=df['id'].astype('int')
+    df = df.set_index('id', drop=False)
+    df.index.name = 'index'
+    df.index = df.index.astype('int')
+    return df
+
+def print_debug(df):
+    print(df.dtypes)
+    print(df.to_string())
+    print(df.to_numpy().tolist())
+    print(tabulate(df, headers='keys', tablefmt='psql'))
+
+
+def to_remove():
+    #df = df.iloc[: , 1:] # removes the first column
+    sheetdf = sheetdf[1:] #Take the data less the header row
+
+    sheetdf.columns = new_header #Set the header row as the df header
+
+
+    jiradf = jiradf.iloc[: , 1:]
+
+
+    new_header = sheetdf.iloc[0] #Get the first row for the header
+    sheetdf = sheetdf[1:] #Take the data less the header row
+
+    sheetdf.columns = new_header #Set the header row as the df header
+    jiradf.columns = new_header
+
 
 # https://stackoverflow.com/questions/15891038/change-column-type-in-pandas
 def coerce_df_columns_to_numeric(df, column_list):
@@ -53,16 +55,6 @@ def get_local_data():
     sheetdf = pd.read_csv('sheetdf.csv', encoding='utf-8')
     jiradf = pd.read_csv('jiradf.csv', encoding='utf-8')
 
-    # remove header row
-    sheetdf = sheetdf.iloc[: , 1:]
-    jiradf = jiradf.iloc[: , 1:]
-
-
-    new_header = sheetdf.iloc[0] #Get the first row for the header
-    sheetdf = sheetdf[1:] #Take the data less the header row
-
-    sheetdf.columns = new_header #Set the header row as the df header
-    jiradf.columns = new_header
 
     sheetdf['id']=sheetdf['id'].astype('int')
     jiradf['id']=jiradf['id'].astype('int')
@@ -149,35 +141,3 @@ def get_local_data():
 
     print(sheetdf.to_numpy().tolist())
     update_cells_test("B1",sheetdf.to_numpy().tolist())
-
-#get_external_data()
-get_local_data()
-#update_cells_test()
-
-
-#Class Structure
-test = """
-Connector
-- Connector (JIRAComponent / GoogleSheetsSheet)
-- set_auth_details
-- set_query_details
-- clean_data
-- get_raw_data
-- get_clean_data
-
-DataProcessorsLibrary
-- cleanJIRAData(dataFrameIn): dataFrameOut
-
-ReconDatSet
-- PandaDataframe
-- Connector (auth_details, query_details)
-- get_data
-- save_local
-- load_local
-- data_as_dictionary
-
-Script
-- Create Data set
-- Initialise Auth and Query
--
-"""

@@ -30,5 +30,6 @@ jobs:
           RECON_TOOLS_JIRA_SERVER: ${{ secrets.RECON_TOOLS_JIRA_SERVER }}
           RECON_TOOLS_JIRA_TOKEN: ${{ secrets.RECON_TOOLS_JIRA_TOKEN }}
         run: |
-          python -m unittest
+          python -m unittest discover -s test/ -p 'test_unit*.py'
+          python -m unittest discover -s test/ -p 'test_system*.py'
           python poc_script.py

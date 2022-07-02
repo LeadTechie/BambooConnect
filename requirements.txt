@@ -7,3 +7,4 @@ requests >= 2.28.0
 jira >= 3.2.0
 coverage >= 6.4.1
 ruamel-yaml
+tabulate >= 0.8.9
