@@ -57,7 +57,7 @@ class Jira_Connector:
 
     #
     def parse_components_with_datetime_stamp(self):
-        return parse_components(components, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        return self.parse_components(self.get_jira_components_json(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     # Takes the standard JSON from eg  https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
     # and pulls this out to a flat format: id, name, owners, description
