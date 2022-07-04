@@ -5,14 +5,15 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 import datetime
+from connectors.base_connector import Base_Connector
 
-class Jira_Connector:
-
+class Jira_Connector(Base_Connector):
     def __init__(self):
         self.user = "leadtechie@gmail.com"
         self.apikey = ""
         self.server = ""
         self.project = ""
+        self.query_string = ""
 
     #
     def initialse_auth(self, project="TEST"):
@@ -21,21 +22,25 @@ class Jira_Connector:
         #https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
         self.server = os.getenv('RECON_TOOLS_JIRA_SERVER')
         self.project = project
+        self.query_string = self.get_jira_components_url(self.server, self.project)
+
+    def set_query_details(self, query_string_in):
+        self.query_string = query_string_in
+
+    def get_raw_data(self, *args):
+        return self.get_jira_components_json();
+
+    def get_clean_data(self, *args):
+        return self.parse_components(self.get_jira_components_json())
 
     def get_jira_components_url(self, server, project):
         return f'{server}/rest/api/3/project/{project}/components'
 
-    def get_jira_components_default_url(self):
-        return self.get_jira_components_url(self.server, self.project)
-
-    def get_jira_components(self):
-        return self.call_jira_api(self.get_jira_components_default_url())
-
     def get_jira_components_json(self):
-        return json.loads(self.get_jira_components().content)
+        return json.loads(self.call_jira_api().content)
 
     #url string in, returns response
-    def call_jira_api(self, url):
+    def call_jira_api(self):
         auth = HTTPBasicAuth(self.user, self.apikey)
 
         headers = {
@@ -45,7 +50,7 @@ class Jira_Connector:
 
         response = requests.request(
             "GET",
-            url,
+            self.query_string,
             headers = headers,
             auth = auth
             #files = {

@@ -13,11 +13,11 @@ class Test_System_GoogleSheets_Connector(unittest.TestCase):
         cell = gsc.get_cell("Recon Tools Test Data","A1")
         self.assertEqual([['2021-09-26T21:09:21+02:00']], cell)
 
-    def test_get_sheet_values(self):
+    def test_get_raw_data(self):
         expected = [['A1', 'B1', 'C1'], ['A2', '', ''], ['', 'B3', '']]
         gsc = GoogleSheets_Connector()
         gsc.initialse_auth()
-        all_cells= gsc.get_sheet("Recon Tools Test Data", "Sheet3")
+        all_cells= gsc.get_raw_data("Recon Tools Test Data", "Sheet3")
         self.assertEqual(expected, all_cells)
         #print(all_cells)
 
