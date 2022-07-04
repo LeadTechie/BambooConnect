@@ -9,10 +9,10 @@ from connectors.base_connector import Base_Connector
 
 class GoogleSheets_Connector(Base_Connector):
 
-    def __init__(self):
+    def __init__(self, gc_in = None):
         #Hack Fix! https://stackoverflow.com/questions/48160728/resourcewarning-unclosed-socket-in-python-3-unit-test
         warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
-        self.gc = None
+        self.gc = gc_in
     #
     def initialse_auth(self):
         credentialsb64 = os.getenv('CREDENTIALS_JSON')
@@ -33,8 +33,24 @@ class GoogleSheets_Connector(Base_Connector):
         sh = self.gc.open(workbook_name)
         return sh.worksheet(sheet_name).get_all_values()
 
-    def get_clean_data():
+    def get_clean_data(self):
         return []
+
+    def reset_sheet_data(self, workbook_name, sheet_name):
+        print("clearing data")
+        sh = self.gc.open(workbook_name)
+        sh.worksheet(sheet_name).clear()
+        # worksheet1 = spreadsheet.worksheet('January')
+        # worksheet2 = worksheet1.copy('February')
+
+    def copy_sheet_data(self, workbook_name, sheet_name_from, sheet_name_to):
+        sh = self.gc.open(workbook_name)
+        values = sh.worksheet(sheet_name_from).get_all_values()
+        sh.worksheet(sheet_name_to).update("A1", values)
+
+    def update_data(self, workbook_name, sheet_name, start_ref, data_in):
+        sh = self.gc.open(workbook_name)
+        sh.worksheet(sheet_name).update(start_ref, data_in)
 
 # -> Below still to refactor clean up
 

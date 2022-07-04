@@ -16,14 +16,26 @@ def make_first_row_header(df):
     return df
 
 def process_component_sheets_data(df):
+    df = df[1:] # remove first info line
     df = make_first_row_header(df)
+    df = standardise_component_data(df)
+    return df
+
+def process_jira_components_data(df):
+    df.columns = ["Time Stamp","id","name","owner","description"]
+    df = standardise_component_data(df)
+    return df
+
+def standardise_component_data(df):
     df['id']=df['id'].astype('int')
     df = df.set_index('id', drop=False)
     df.index.name = 'index'
     df.index = df.index.astype('int')
     return df
 
-def print_debug(df):
+def print_debug(df, extra_info=""):
+    print()
+    print(extra_info)
     print(df.dtypes)
     print(df.to_string())
     print(df.to_numpy().tolist())
@@ -101,43 +113,43 @@ def get_local_data():
     #print("jiradf.info()")
     #print(jiradf.info())
 
+
+def update_add_delete_data(new_data_df, existing_data_df):
     # Notes that didn't quite work...
     #https://moonbooks.org/Articles/How-to-replace-rows-of-a-dataframe-using-rows-of-another-dataframe-based-on-indexes-with-pandas-/
     #https://stackoverflow.com/questions/51394653/update-a-pandas-dataframe-with-data-from-another-dataframe
-    #df = sheetdf.combine_first(jiradf).reindex(jiradf.index)
+    #df = sheetdf.combine_first(new_data_df).reindex(jiradf.index)
 
     # Update values where the row is in old and new data sets
     #sheetdf.update(sheetdf[['id']].merge(jiradf, 'left'))
 
-    in_jira =  jiradf.loc[:,"id"].values
-    in_sheet = sheetdf.loc[:,"id"].values
-    update_rows = np.intersect1d(in_jira, in_sheet)
+    new_data_ids =  new_data_df.loc[:,"id"].values
+    existing_data_ids = existing_data_df.loc[:,"id"].values
+    update_rows = np.intersect1d(new_data_ids, existing_data_ids)
     for i in update_rows:
-        sheetdf.loc[i] = jiradf.loc[i]
+        existing_data_df.loc[i] = new_data_df.loc[i]
 
     # add new lines to the end
-    in_jira =  jiradf.loc[:,"id"].values
-    in_sheet = sheetdf.loc[:,"id"].values
-    new_rows = np.setdiff1d(in_jira, in_sheet)
-    print(in_jira, in_sheet, new_rows)
-    print_dataset(sheetdf, "pre result")
+    new_data_ids =  new_data_df.loc[:,"id"].values
+    existing_data_ids = existing_data_df.loc[:,"id"].values
+    new_rows = np.setdiff1d(new_data_ids, existing_data_ids)
+    print(new_data_ids, existing_data_ids, new_rows)
+    print_debug(existing_data_df, "pre result")
 
     for i in new_rows:
-        sheetdf.loc[i] = jiradf.loc[i]
+        existing_data_df.loc[i] = new_data_df.loc[i]
 
-    new_rows = np.setdiff1d(in_jira, in_sheet)
-    print(in_jira, in_sheet, new_rows)
-    print_dataset(sheetdf, "pre result")
+    new_rows = np.setdiff1d(new_data_ids, existing_data_ids)
+    print(new_data_ids, existing_data_ids, new_rows)
+    print_debug(existing_data_df, "pre result")
 
 
     #dataframe.at[index,'column-name']='new value'
-    deleted_rows = np.setdiff1d(in_sheet, in_jira)
+    deleted_rows = np.setdiff1d(existing_data_ids, new_data_ids)
     print(deleted_rows)
     for i in deleted_rows:
-        sheetdf.loc[i, 'name':] = ""
+        existing_data_df.loc[i, 'name':] = ""
 
-    print(sheetdf.dtypes)
-    print_dataset(sheetdf, "result")
-
-    print(sheetdf.to_numpy().tolist())
-    update_cells_test("B1",sheetdf.to_numpy().tolist())
+    print(existing_data_df.dtypes)
+    print_debug(existing_data_df, "result")
+    return existing_data_df

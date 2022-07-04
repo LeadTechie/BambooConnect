@@ -1,13 +1,34 @@
 from connectors.googlesheets_connector import GoogleSheets_Connector
 from connectors.jira_connector import Jira_Connector
+from connectors.base_connector import Base_Connector
+
 import pandas as pd
 import json
 import numpy as np
 
 class Recon_DataSet:
 
+    def __init__(self, connector = Base_Connector()):
+        self.bc = connector
+        self.df = None
+
     def test_first(self):
         return "test_first"
+
+    def set_data(self, cells):
+        self.df = pd.DataFrame.from_dict(cells)
+        print(cells)
+        print(self.df)
+        return self.df
+
+    def process_data(self, function_in):
+        self.df = function_in(self.df)
+        return self.df
+
+
+    def test_two(self):
+
+        return "test_two"
 
 
 

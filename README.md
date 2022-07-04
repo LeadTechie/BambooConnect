@@ -28,3 +28,8 @@ echo "$CREDENTIALS_JSON"
 ### Run unit tests to check working
 - python -m unittest
 - python poc_script.py
+
+
+### Running Tests Locally
+- python -m unittest discover -s test/ -p 'test_unit*.py'
+- python -m unittest discover -s test/ -p 'test_system*.py'

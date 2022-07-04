@@ -69,5 +69,6 @@ class Test_System_Jira_Connector(unittest.TestCase):
         ticket_description = jc.test_jira_wrapper_access("TEST-3")
         self.assertEqual(ticket_description, "Test Bug 2")
 
+
 if __name__ == '__main__':
     unittest.main()
