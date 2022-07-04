@@ -17,8 +17,8 @@ class Recon_DataSet:
 
     def set_data(self, cells):
         self.df = pd.DataFrame.from_dict(cells)
-        print(cells)
-        print(self.df)
+        #print(cells)
+        #print(self.df)
         return self.df
 
     def process_data(self, function_in):
@@ -44,15 +44,15 @@ class Recon_DataSet:
         sheetdf = pd.DataFrame.from_dict(all_cells)
         jiradf = pd.DataFrame.from_dict(jira_components)
 
-        print("sheetdf")
-        print("")
-        print(sheetdf)
-        print("")
+        #print("sheetdf")
+        #print("")
+        #print(sheetdf)
+        #print("")
 
-        print("jiradf")
-        print("")
-        print(jiradf)
-        print("")
+        #print("jiradf")
+        #print("")
+        #print(jiradf)
+        #print("")
 
         sheetdf.to_csv('sheetdf.csv', encoding='utf-8')
         jiradf.to_csv('jiradf.csv', encoding='utf-8')

@@ -98,7 +98,7 @@ def get_local_data():
     #print(sheetdf.dtypes)
     #print(jiradf.dtypes)
 
-    print_datasets(sheetdf, jiradf)
+    #print_datasets(sheetdf, jiradf)
     #print(sheetdf.columns)
     #print(jiradf.columns)
 
@@ -123,6 +123,8 @@ def update_add_delete_data(new_data_df, existing_data_df):
     # Update values where the row is in old and new data sets
     #sheetdf.update(sheetdf[['id']].merge(jiradf, 'left'))
 
+    #print_debug(existing_data_df, "pre result")
+
     new_data_ids =  new_data_df.loc[:,"id"].values
     existing_data_ids = existing_data_df.loc[:,"id"].values
     update_rows = np.intersect1d(new_data_ids, existing_data_ids)
@@ -133,23 +135,23 @@ def update_add_delete_data(new_data_df, existing_data_df):
     new_data_ids =  new_data_df.loc[:,"id"].values
     existing_data_ids = existing_data_df.loc[:,"id"].values
     new_rows = np.setdiff1d(new_data_ids, existing_data_ids)
-    print(new_data_ids, existing_data_ids, new_rows)
-    print_debug(existing_data_df, "pre result")
+    #print(new_data_ids, existing_data_ids, new_rows)
+    #print_debug(existing_data_df, "pre result")
 
     for i in new_rows:
         existing_data_df.loc[i] = new_data_df.loc[i]
 
     new_rows = np.setdiff1d(new_data_ids, existing_data_ids)
-    print(new_data_ids, existing_data_ids, new_rows)
-    print_debug(existing_data_df, "pre result")
+    #print(new_data_ids, existing_data_ids, new_rows)
+    #print_debug(existing_data_df, "pre result")
 
 
     #dataframe.at[index,'column-name']='new value'
     deleted_rows = np.setdiff1d(existing_data_ids, new_data_ids)
-    print(deleted_rows)
+    #print(deleted_rows)
     for i in deleted_rows:
         existing_data_df.loc[i, 'name':] = ""
 
-    print(existing_data_df.dtypes)
-    print_debug(existing_data_df, "result")
+    #print(existing_data_df.dtypes)
+    #print_debug(existing_data_df, "result")
     return existing_data_df

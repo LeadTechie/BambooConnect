@@ -37,7 +37,7 @@ class GoogleSheets_Connector(Base_Connector):
         return []
 
     def reset_sheet_data(self, workbook_name, sheet_name):
-        print("clearing data")
+        #print("clearing data")
         sh = self.gc.open(workbook_name)
         sh.worksheet(sheet_name).clear()
         # worksheet1 = spreadsheet.worksheet('January')

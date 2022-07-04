@@ -19,10 +19,10 @@ def load_google_data():
     all_cells= gsc.get_raw_data("Recon Tools Test Data", "SampleData")
     rds1.set_data(all_cells)
     rds1.process_data(dt.process_component_sheets_data)
-    print(rds1.df)
+    #print(rds1.df)
 
-    print(rds1.test_first())
-    print(rds1.df)
+    #print(rds1.test_first())
+    #print(rds1.df)
     return rds1
 
 def load_jira_data():
@@ -34,16 +34,16 @@ def load_jira_data():
     full_components_from_jira = jc.get_clean_data()
     rds2.set_data(full_components_from_jira)
     rds2.process_data(dt.process_jira_components_data)
-    print(rds2.df)
+    #print(rds2.df)
     return rds2
 
 def get_new_data():
     rds1 = load_google_data()
     rds2 = load_jira_data()
 
-    result = dt.update_add_delete_data(rds1.df, rds2.df)
-    print("result...")
-    print(result)
+    result = dt.update_add_delete_data(rds2.df, rds1.df)
+    #print("result...")
+    #print(result)
     return result
 
 def update_data(result):
@@ -53,7 +53,7 @@ def update_data(result):
     gsc.reset_sheet_data("Recon Tools Test Data", "write-data-test")
     gsc.copy_sheet_data("Recon Tools Test Data", "SampleData", "write-data-test")
     gsc.update_data("Recon Tools Test Data", "write-data-test", "A3", result.to_numpy().tolist() )
-    print("done")
+    #print("done")
 
 result = get_new_data()
 update_data(result);
