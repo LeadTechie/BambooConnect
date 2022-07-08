@@ -5,6 +5,8 @@ import base64
 import gspread
 import os
 
+
+
 #Take the credentials.json file and base64 encode it so you can add as key in environment variable and GitHub secret
 with open('../credentials.json') as jsonfile:
     data = json.load(jsonfile)
