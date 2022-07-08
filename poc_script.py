@@ -4,6 +4,7 @@ import json
 import os
 from connectors.googlesheets_connector import GoogleSheets_Connector
 from connectors.jira_connector import Jira_Connector
+import authentication_support as auth_sup
 
 import data_translations as dt
 
@@ -11,13 +12,18 @@ from recon_dataset import Recon_DataSet
 
 def load_google_data():
     gsc = GoogleSheets_Connector()
-    gsc.initialse_auth()
+    gsc.initialse_auth('CREDENTIALS_JSON')
     #https://stackoverflow.com/questions/394770/override-a-method-at-instance-level
     #gsc.get_clean_data = funcType(gsc, gsc.get_worksheet_values("Recon Tools Test Data", "SampleData")
+    #get_my_worksheet_values = gsc.get_worksheet_values
+    #gsc.initialse_query(gsc.get_worksheet_values, "Recon Tools Test Data", "SampleData")
+
+    gsc.initialse_query()
 
     rds1 = Recon_DataSet(gsc)
-    all_cells= gsc.get_raw_data("Recon Tools Test Data", "SampleData")
-    rds1.set_data(all_cells)
+    #all_cells = gsc.get_worksheet_values("Recon Tools Test Data", "SampleData")
+    #rds1.set_data(all_cells)
+    rds1.set_data(gsc.get_raw_data("Recon Tools Test Data", "SampleData"))
     rds1.process_data(dt.process_component_sheets_data)
     #print(rds1.df)
 
@@ -28,18 +34,29 @@ def load_google_data():
 def load_jira_data():
     jc = Jira_Connector()
     os.environ['RECON_TOOLS_JIRA_EMAIL'] = 'leadtechie@gmail.com'
-    os.environ['RECON_TOOLS_JIRA_SERVER'] = 'https://leadtechie.atlassian.net'
     rds2 = Recon_DataSet(jc)
-    jc.initialse_auth()
-    full_components_from_jira = jc.get_clean_data()
-    rds2.set_data(full_components_from_jira)
+    jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
+    jc.initialse_query('https://leadtechie.atlassian.net/rest/api/3/project/TEST/components', dt.flatten_jira_components)
+
+    print(jc.get_raw_data())
+    print(jc.get_clean_data())
+
+    rds2.set_data(jc.get_clean_data())
     rds2.process_data(dt.process_jira_components_data)
+
     #print(rds2.df)
     return rds2
 
 def get_new_data():
-    rds1 = load_google_data()
     rds2 = load_jira_data()
+    rds1 = load_google_data()
+
+    print("JIRA")
+    print(rds2.df)
+    print()
+    print("Google")
+    print(rds1.df)
+    print()
 
     result = dt.update_add_delete_data(rds2.df, rds1.df)
     #print("result...")

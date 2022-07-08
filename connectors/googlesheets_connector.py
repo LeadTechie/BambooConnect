@@ -13,18 +13,26 @@ class GoogleSheets_Connector(Base_Connector):
         #Hack Fix! https://stackoverflow.com/questions/48160728/resourcewarning-unclosed-socket-in-python-3-unit-test
         warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
         self.gc = gc_in
+        self.clean_data = self.default_clean_data
     #
-    def initialse_auth(self):
-        credentialsb64 = os.getenv('CREDENTIALS_JSON')
+
+    def default_clean_data(self, data_in):
+        return data_in
+
+    def initialse_auth(self, credentials_key='CREDENTIALS_JSON'):
+        credentialsb64 = os.getenv(credentials_key)
         credentials = base64.b64decode(credentialsb64)
         json_credentials = json.loads(credentials)
         self.gc = gspread.service_account_from_dict(json_credentials)
 
-    def set_auth_details(*argv):
-        None
+#    def initialse_query(self, read_function, clean_data_in=None):
+#        self.query_string = query_string #self.get_jira_components_url(self.server, self.project)
+#        self.get_raw_data = get_raw_data_in_function
+#        if clean_data_in != None:
+#            self.clean_data = clean_data_in
 
-    def clean_data():
-        None
+    def initialse_query(self):
+        return ""
 
     def get_raw_data(self, *args):
         return self.get_worksheet_values(*args)
@@ -33,8 +41,7 @@ class GoogleSheets_Connector(Base_Connector):
         sh = self.gc.open(workbook_name)
         return sh.worksheet(sheet_name).get_all_values()
 
-    def get_clean_data(self):
-        return []
+# generic support methods
 
     def reset_sheet_data(self, workbook_name, sheet_name):
         #print("clearing data")
