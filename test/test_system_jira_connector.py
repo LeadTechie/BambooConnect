@@ -2,6 +2,7 @@ import unittest
 import os
 import json
 from connectors.jira_connector import Jira_Connector
+import data_translations as dt
 #import py_recon_tools.jira_connector.Jira_Connector
 
 class Test_System_Jira_Connector(unittest.TestCase):
@@ -55,18 +56,20 @@ class Test_System_Jira_Connector(unittest.TestCase):
             }
         ]
         os.environ['RECON_TOOLS_JIRA_EMAIL'] = 'leadtechie@gmail.com'
-        os.environ['RECON_TOOLS_JIRA_SERVER'] = 'https://leadtechie.atlassian.net'
-        jc.initialse_auth()
+        jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
+        jc.initialse_query('https://leadtechie.atlassian.net/rest/api/3/project/TEST/components', dt.flatten_jira_components)
         full_components_from_jira = jc.get_raw_data()
+
 
         #print(full_components_from_jira)
         #new_filtered_list = jc.parse_components(full_components_from_jira, '2022-06-27 22:34:09')
         self.assertEqual(full_components_from_jira, full_jira_component_json)
 
     def test_test_jira_wrapper_access(self):
+        os.environ['RECON_TOOLS_JIRA_EMAIL'] = 'leadtechie@gmail.com'
         jc = Jira_Connector()
-        jc.initialse_auth()
-        ticket_description = jc.test_jira_wrapper_access("TEST-3")
+        jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
+        ticket_description = jc.test_jira_wrapper_access("TEST-3", 'https://leadtechie.atlassian.net')
         self.assertEqual(ticket_description, "Test Bug 2")
 
 

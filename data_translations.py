@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 from tabulate import tabulate
+import datetime
 
 def test_first():
     #print(pd.read_csv('sheetdf.csv', encoding='utf-8').to_numpy().tolist())
@@ -13,6 +14,10 @@ def make_first_row_header(df):
     new_header = df.iloc[0] #Get the first row for the header
     df.columns = new_header
     df = df[1:] # remove the header row from the data
+    return df
+
+def drop_first_column(df):
+    df = df.iloc[: , 1:]
     return df
 
 def process_component_sheets_data(df):
@@ -57,6 +62,27 @@ def to_remove():
 
     sheetdf.columns = new_header #Set the header row as the df header
     jiradf.columns = new_header
+
+def flatten_jira_components_with_datetime_stamp(component_json):
+    return flatten_jira_components(component_json, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+# Takes the standard JSON from eg  https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
+# and pulls this out to a flat format: time_stampe, id, name, owners, description
+def flatten_jira_components(component_json, time_stamp='2022-06-27 22:54:45'):
+    results = []
+    for component in component_json:
+        results.append( [ time_stamp,
+            component["id"],
+            component["name"],
+            component['lead']['displayName'] if 'lead' in component else "<No Owner>",
+            component['description'] if 'description' in component else "<No Description>"
+            ])
+    return results
+
+
+
+
+
 
 
 # https://stackoverflow.com/questions/15891038/change-column-type-in-pandas

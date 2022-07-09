@@ -17,7 +17,9 @@ class Test_System_GoogleSheets_Connector(unittest.TestCase):
         expected = [['A1', 'B1', 'C1'], ['A2', '', ''], ['', 'B3', '']]
         gsc = GoogleSheets_Connector()
         gsc.initialse_auth()
-        all_cells= gsc.get_raw_data("Recon Tools Test Data", "Sheet3")
+        gsc.initialse_query(gsc.get_worksheet_values,"Recon Tools Test Data", "SystemTestData")
+
+        all_cells = gsc.get_raw_data()
         self.assertEqual(expected, all_cells)
         #print(all_cells)
 

@@ -9,35 +9,37 @@ from connectors.base_connector import Base_Connector
 
 class Jira_Connector(Base_Connector):
     def __init__(self):
-        self.user = "leadtechie@gmail.com"
+        self.user = ""
         self.apikey = ""
-        self.server = ""
-        self.project = ""
         self.query_string = ""
+        self.clean_data = self.default_clean_data
+
+    def default_clean_data(self, data_in):
+        return data_in
 
     #
-    def initialse_auth(self, project="TEST"):
-        self.user =  os.getenv('RECON_TOOLS_JIRA_EMAIL')
-        self.apikey = os.getenv('RECON_TOOLS_JIRA_TOKEN')
+    def initialse_auth(self, user_env, apikey_env):
+        self.user =  os.getenv(user_env)
+        self.apikey = os.getenv(apikey_env)
         #https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
-        self.server = os.getenv('RECON_TOOLS_JIRA_SERVER')
-        self.project = project
-        self.query_string = self.get_jira_components_url(self.server, self.project)
 
-    def set_query_details(self, query_string_in):
-        self.query_string = query_string_in
+    def initialse_query(self, query_string, clean_data_in=None):
+        self.query_string = query_string #self.get_jira_components_url(self.server, self.project)
+        if clean_data_in != None:
+            self.clean_data = clean_data_in
 
-    def get_raw_data(self, *args):
-        return self.get_jira_components_json();
+    def get_raw_data(self):
+        return json.loads(self.call_jira_api().content);
 
-    def get_clean_data(self, *args):
-        return self.parse_components(self.get_jira_components_json())
+    def get_clean_data(self):
+        return self.clean_data(self.get_raw_data())
 
-    def get_jira_components_url(self, server, project):
-        return f'{server}/rest/api/3/project/{project}/components'
+    def clean_data():
+        return ""
 
-    def get_jira_components_json(self):
-        return json.loads(self.call_jira_api().content)
+
+
+
 
     #url string in, returns response
     def call_jira_api(self):
@@ -60,26 +62,27 @@ class Jira_Connector(Base_Connector):
         #print(response.content)
         return response
 
-    #
-    def parse_components_with_datetime_stamp(self):
-        return self.parse_components(self.get_jira_components_json(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    # Takes the standard JSON from eg  https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
-    # and pulls this out to a flat format: id, name, owners, description
-    def parse_components(self, components, time_stamp='2022-06-27 22:54:45'):
-        results = []
-        for component in components:
-            results.append( [ time_stamp,
-                component["id"],
-                component["name"],
-                component['lead']['displayName'] if 'lead' in component else "<No Owner>",
-                component['description'] if 'description' in component else "<No Description>"
-                ])
-        return results
 
-    def test_jira_wrapper_access(self, ticket_name):
+    def set_query_details(self, query_string_in):
+        self.query_string = query_string_in
+
+
+
+
+
+
+
+
+
+
+
+# Unused, to be deleted...
+
+    # Another way to access jira through a higher level wrapper
+    def test_jira_wrapper_access(self, ticket_name, server_name):
         options = {
-            'server': self.server
+            'server': server_name
         }
 
         jira = JIRA(options, basic_auth=(self.user,self.apikey))
@@ -91,3 +94,6 @@ class Jira_Connector(Base_Connector):
 
         #print('ticket: ', ticket, summary)
         return summary
+
+    def get_jira_components_url(self, server, project):
+        return f'{server}/rest/api/3/project/{project}/components'
