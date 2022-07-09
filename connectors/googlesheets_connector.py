@@ -25,23 +25,15 @@ class GoogleSheets_Connector(Base_Connector):
         json_credentials = json.loads(credentials)
         self.gc = gspread.service_account_from_dict(json_credentials)
 
-#    def initialse_query(self, read_function, clean_data_in=None):
-#        self.query_string = query_string #self.get_jira_components_url(self.server, self.project)
-#        self.get_raw_data = get_raw_data_in_function
-#        if clean_data_in != None:
-#            self.clean_data = clean_data_in
+    def initialse_query(self, get_raw_data_in_function, *argv):
+        self.get_raw_data = self.curry(get_raw_data_in_function, *argv)
 
-    def initialse_query(self):
-        return ""
-
-    def get_raw_data(self, *args):
-        return self.get_worksheet_values(*args)
+# generic support methods
 
     def get_worksheet_values(self, workbook_name, sheet_name):
         sh = self.gc.open(workbook_name)
         return sh.worksheet(sheet_name).get_all_values()
 
-# generic support methods
 
     def reset_sheet_data(self, workbook_name, sheet_name):
         #print("clearing data")

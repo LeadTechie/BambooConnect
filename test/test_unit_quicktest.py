@@ -31,6 +31,9 @@ class A:
         self.function_to_be_defined = curry(function_a, *args)
         return None
 
+    def can_be_overwritten(self, *args):
+        return None
+
 # Quick File for testing out concepts before using them in project
 class Test_Unit_QuickTest(unittest.TestCase):
 
@@ -48,6 +51,11 @@ class Test_Unit_QuickTest(unittest.TestCase):
         c = A()
         c.hello5(c.hello2, 'a', 'b')
         self.assertEqual(c.function_to_be_defined(),"Hello a b" )
+
+        d = A()
+        self.assertEqual(d.can_be_overwritten(),None)
+        d.can_be_overwritten = standard_function
+        self.assertEqual(d.can_be_overwritten(),"standard_function")
 
 
 if __name__ == '__main__':

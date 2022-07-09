@@ -18,12 +18,12 @@ def load_google_data():
     #get_my_worksheet_values = gsc.get_worksheet_values
     #gsc.initialse_query(gsc.get_worksheet_values, "Recon Tools Test Data", "SampleData")
 
-    gsc.initialse_query()
-
     rds1 = Recon_DataSet(gsc)
-    #all_cells = gsc.get_worksheet_values("Recon Tools Test Data", "SampleData")
-    #rds1.set_data(all_cells)
-    rds1.set_data(gsc.get_raw_data("Recon Tools Test Data", "SampleData"))
+    gsc.initialse_query(gsc.get_worksheet_values, "Recon Tools Test Data", "SampleData")
+
+    data = gsc.get_raw_data()
+
+    rds1.set_data(data)
     rds1.process_data(dt.process_component_sheets_data)
     #print(rds1.df)
 

@@ -2,6 +2,7 @@ import unittest
 import os
 import json
 from connectors.jira_connector import Jira_Connector
+import data_translations as dt
 
 class Test_Unit_Jira_Connector(unittest.TestCase):
 
@@ -11,16 +12,15 @@ class Test_Unit_Jira_Connector(unittest.TestCase):
         os.environ['RECON_TOOLS_JIRA_SERVER'] = 'https://leadtechie.atlassian.net'
         jc = Jira_Connector()
 
-        jc.initialse_auth()
+        jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
         self.assertEqual(jc.user, 'leadtechie@gmail.com')
         self.assertEqual(jc.apikey, 'test_token')
-        self.assertEqual(jc.server, 'https://leadtechie.atlassian.net')
 
     def test_get_jira_components(self):
         jc = Jira_Connector()
-        jc.initialse_auth()
+        jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
         self.assertEqual(jc.get_jira_components_url("https://leadtechie.atlassian.net", "TEST"), "https://leadtechie.atlassian.net/rest/api/3/project/TEST/components")
-        
+
 
     def test_parse_components(self):
         jc = Jira_Connector()
@@ -94,7 +94,7 @@ class Test_Unit_Jira_Connector(unittest.TestCase):
                 "TestComponent3 Description"
             ]
         ]
-        new_filtered_list = jc.parse_components(full_jira_component_json, '2022-06-27 22:34:09')
+        new_filtered_list = dt.flatten_jira_components(full_jira_component_json, '2022-06-27 22:34:09')
         self.assertEqual(new_filtered_list, jira_filtered_component_json)
 
 

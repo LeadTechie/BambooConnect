@@ -28,7 +28,6 @@ class Jira_Connector(Base_Connector):
         if clean_data_in != None:
             self.clean_data = clean_data_in
 
-
     def get_raw_data(self):
         return json.loads(self.call_jira_api().content);
 
@@ -81,9 +80,9 @@ class Jira_Connector(Base_Connector):
 # Unused, to be deleted...
 
     # Another way to access jira through a higher level wrapper
-    def test_jira_wrapper_access(self, ticket_name):
+    def test_jira_wrapper_access(self, ticket_name, server_name):
         options = {
-            'server': self.server
+            'server': server_name
         }
 
         jira = JIRA(options, basic_auth=(self.user,self.apikey))
