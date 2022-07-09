@@ -33,3 +33,4 @@ echo "$CREDENTIALS_JSON"
 ### Running Tests Locally
 - python -m unittest discover -s test/ -p 'test_unit*.py'
 - python -m unittest discover -s test/ -p 'test_system*.py'
+- python -m unittest discover -s test/ -p 'test_unit_quicktest.py'

@@ -5,9 +5,6 @@ class Base_Connector:
     def initialse_auth(self, *argv):
         None
 
-    def set_auth_details(*argv):
-        None
-
     def set_query_details(*argv):
         None
 
