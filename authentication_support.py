@@ -23,7 +23,7 @@ def print_base64_data(filename='../credentials.json'):
     print()
     print('Base64 Encoded json credentials file')
     print(encode_json_file_to_base64(filename))
-    print("COPY THE TEXT between the b' and ' above into the gihhub environemnt variable'")
+    print("COPY THE TEXT between the b' and ' above into the gihhub environemnt variable (CREDENTIALS_JSON)")
     print()
     print()
 
@@ -36,3 +36,6 @@ def set_env_variable(name, value):
 
 def get_env(name):
     return os.getenv(name)
+
+
+print_base64_data()
