@@ -8,9 +8,9 @@ import numpy as np
 
 class Recon_DataSet:
 
-    def __init__(self, connector = Base_Connector()):
+    def __init__(self, connector = Base_Connector(), df_in = None):
         self.bc = connector
-        self.df = None
+        self.df = df_in
 
     def test_first(self):
         return "test_first"

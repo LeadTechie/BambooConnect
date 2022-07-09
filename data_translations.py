@@ -16,6 +16,10 @@ def make_first_row_header(df):
     df = df[1:] # remove the header row from the data
     return df
 
+def drop_first_column(df):
+    df = df.iloc[: , 1:]
+    return df
+
 def process_component_sheets_data(df):
     df = df[1:] # remove first info line
     df = make_first_row_header(df)

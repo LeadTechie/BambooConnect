@@ -24,6 +24,7 @@ def load_google_data():
     data = gsc.get_raw_data()
 
     rds1.set_data(data)
+    rds1.df.to_csv('test_data/sheetdf.csv', encoding='utf-8')
     rds1.process_data(dt.process_component_sheets_data)
     #print(rds1.df)
 
@@ -42,6 +43,7 @@ def load_jira_data():
     print(jc.get_clean_data())
 
     rds2.set_data(jc.get_clean_data())
+    rds2.df.to_csv('test_data/jiradf.csv', encoding='utf-8')
     rds2.process_data(dt.process_jira_components_data)
 
     #print(rds2.df)
@@ -51,6 +53,9 @@ def get_new_data():
     rds2 = load_jira_data()
     rds1 = load_google_data()
 
+    return rds1, rds2
+
+def print_both_datasets(rds1, rds2):
     print("JIRA")
     print(rds2.df)
     print()
@@ -58,6 +63,8 @@ def get_new_data():
     print(rds1.df)
     print()
 
+def do_the_reconciliation(rds1, rds2):
+    print_both_datasets(rds1, rds2)
     result = dt.update_add_delete_data(rds2.df, rds1.df)
     #print("result...")
     #print(result)
@@ -72,5 +79,29 @@ def update_data(result):
     gsc.update_data("Recon Tools Test Data", "write-data-test", "A3", result.to_numpy().tolist() )
     #print("done")
 
-result = get_new_data()
+def get_local_data():
+    sheetdf = pd.read_csv('test_data/sheetdf.csv', encoding='utf-8')
+    rds1 = Recon_DataSet()
+    rds1.df = sheetdf
+
+    rds2 = Recon_DataSet()
+    rds2.df = pd.read_csv('test_data/jiradf.csv', encoding='utf-8')
+
+    return rds1, rds2
+
+rdss = get_new_data()
+result = do_the_reconciliation(rdss[0], rdss[1])
+update_data(result);
+
+
+print("get local data")
+rdss = get_local_data()
+print_both_datasets(rdss[0], rdss[1])
+# re-opening csvs that were created by panda seem to have extra first column
+rdss[0].process_data(dt.drop_first_column)
+rdss[0].process_data(dt.process_component_sheets_data)
+rdss[1].process_data(dt.drop_first_column)
+rdss[1].process_data(dt.process_jira_components_data)
+result = do_the_reconciliation(rdss[0], rdss[1])
+
 update_data(result);
