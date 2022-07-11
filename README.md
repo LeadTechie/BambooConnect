@@ -1,12 +1,15 @@
 # py_recon_tools
 recon_tools: Tools to support importing, exporting and reconciliation of data from JIRA, GoogleSheets and more..
 
+### Further Details
+- See the sub pages for [details on setting up the credentials and access tokens for Google and JIRA](readme/README.md)
 
 ### Python Environment Manager - Install Conda:  
 - Install - [https://docs.conda.io/en/latest/miniconda.html](https://docs.conda.io/en/latest/miniconda.html)  
 [https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html](https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html)  
 - Update [https://www.geeksforgeeks.org/set-up-virtual-environment-for-python-using-anaconda/](https://www.geeksforgeeks.org/set-up-virtual-environment-for-python-using-anaconda/)  
 Set version 3.9.12  
+
 ```
 conda create -n python3-9-12 python=3.9.12 anaconda  
 conda activate python3-9-12  
@@ -19,6 +22,7 @@ pip install -r ./requirements.txt
 
 ### Set Environment Variables for login
 Place your Google credentials.json file in the directory below the project directory then run
+See here for [how to create your credentials.json file](readme/credentials/README.md)
 ```
 python authentication_support.py
 ```
@@ -37,21 +41,36 @@ echo "$RECON_TOOLS_JIRA_EMAIL"
 echo "$CREDENTIALS_JSON"
 ```
 
-### Run unit tests to check working
+### Test Setup
+
+Testing is setup at 4 levels:
+1. Unit Tests: All tests and test data is in test files
+2. System Tests: Uses test files in subdirectory /test_data/
+3. Integration Tests: Links to 3rd party systems but relies on minimumd data in these systems so you can run these tests
+4. end2end Tests: Integration tests relying on specfic sestup or external systems (JIRA & Sheets) so won't work for you unless you get access to my projects or use test files to recreate base data
+
+### Run local tests to check working
 ```
-python -m unittest
+python -m unittest discover -s test/unit -p 'test_*.py'
+python -m unittest discover -s test/system -p 'test_*.py'
 ```
 
 ### Run an example of a component reconciliation using this script
 
 TODO: Currently this requires access to a test JIRA account
 ```
-python poc_script.py
+python poc_e2e_script.py
 ```
 
 ### Running Tests Locally
 ```
-python -m unittest discover -s test/ -p 'test_unit*.py'
-python -m unittest discover -s test/ -p 'test_system*.py'
-python -m unittest discover -s test/ -p 'test_unit_quicktest.py'
+python -m unittest discover -p 'test*.py'
+
+python -m unittest discover -s test/unit -p 'test_*.py'
+python -m unittest discover -s test/system -p 'test_*.py'
+python -m unittest discover -s test/integration -p 'test_*.py'
+python -m unittest discover -s test/end2end -p 'test_*.py'
+
+python poc_e2e_script.py
+
 ```
