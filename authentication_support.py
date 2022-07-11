@@ -37,5 +37,5 @@ def set_env_variable(name, value):
 def get_env(name):
     return os.getenv(name)
 
-
-print_base64_data()
+if __name__ == '__main__':
+    print_base64_data()
