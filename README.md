@@ -1,5 +1,17 @@
 # py_recon_tools
-recon_tools: Tools to support importing, exporting and reconciliation of data from JIRA, GoogleSheets and more..
+
+1. Convenient high level wrappers for easy access to data from JIRA & Google Sheets and more to come
+2. Standard library of transformations to clean and reconcile data
+3. Simple wrappers to update and save results in Google Sheets
+
+### Recon Tools Overview
+![ReconToolsArchitectureDiagramOverview.jpg](readme/ReconToolsArchitectureDiagramOverview.jpg?raw=true)
+
+### Recon Tools High Level Architecture And Flow
+![ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg](readme/ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg?raw=true)
+
+### Recon Tools Test Approach
+![ReconToolsArchitectureDiagramTestApproach.jpg](readme/ReconToolsArchitectureDiagramTestApproach.jpg?raw=true)
 
 ### Further Details
 - See the sub pages for [details on setting up the credentials and access tokens for Google and JIRA](readme/README.md)
