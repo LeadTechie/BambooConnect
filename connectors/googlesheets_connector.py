@@ -8,16 +8,15 @@ from connectors.base_connector import Base_Connector
 
 
 class GoogleSheets_Connector(Base_Connector):
+    # base class provides
+    #.get_raw_data
+    #.get_clean_data
 
     def __init__(self, gc_in = None):
         #Hack Fix! https://stackoverflow.com/questions/48160728/resourcewarning-unclosed-socket-in-python-3-unit-test
         warnings.filterwarnings(action="ignore", message="unclosed", category=ResourceWarning)
         self.gc = gc_in
         self.clean_data = self.default_clean_data
-    #
-
-    def default_clean_data(self, data_in):
-        return data_in
 
     def initialse_auth(self, credentials_key='CREDENTIALS_JSON'):
         credentialsb64 = os.getenv(credentials_key)
@@ -27,6 +26,7 @@ class GoogleSheets_Connector(Base_Connector):
 
     def initialse_query(self, get_raw_data_in_function, *argv):
         self.get_raw_data = self.curry(get_raw_data_in_function, *argv)
+
 
 # generic support methods
 

@@ -1,7 +1,6 @@
 class Base_Connector:
     def __init__(self):
-        self.clean_data = None # function that will be set for clearning data
-    #
+        None
 
     def initialse_auth(self, *argv):
         None
@@ -13,9 +12,16 @@ class Base_Connector:
         return []
 
     def get_clean_data(self):
-        return []
+        return self.clean_data(self.get_raw_data())
 
-    @staticmethod    
+    def default_clean_data(self, data):
+        return data
+
+    #Base class, simply return original data
+    def clean_data(self, data):
+        return data
+
+    @staticmethod
     def curry (prior, *additional):
         def curried(*args):
             return prior(*(args + additional))
