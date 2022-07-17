@@ -21,31 +21,30 @@ def load_google_data():
     rds1 = Recon_DataSet(gsc)
     gsc.initialse_query(gsc.get_worksheet_values, "Recon Tools Test Data", "SampleData")
 
-    data = gsc.get_raw_data()
+    rds1.extract_data()
 
-    rds1.set_data(data)
     rds1.df.to_csv('test_data/sheetdf.csv', encoding='utf-8')
-    rds1.process_data(dt.process_component_sheets_data)
-    #print(rds1.df)
+    rds1.transform_function = dt.process_component_sheets_data
+    rds1.transform_data()
 
-    #print(rds1.test_first())
-    #print(rds1.df)
     return rds1
 
 def load_jira_data():
     jc = Jira_Connector()
     os.environ['RECON_TOOLS_JIRA_EMAIL'] = 'leadtechie@gmail.com'
-    rds2 = Recon_DataSet(jc)
     jc.initialse_auth('RECON_TOOLS_JIRA_EMAIL', 'RECON_TOOLS_JIRA_TOKEN')
+    rds2 = Recon_DataSet(jc)
     jc.initialse_query('https://leadtechie.atlassian.net/rest/api/3/project/TEST/components', dt.flatten_jira_components)
 
     print(jc.get_raw_data())
     print(jc.get_clean_data())
 
-    rds2.set_data(jc.get_clean_data())
+    rds2.extract_data()
     rds2.df.to_csv('test_data/jiradf.csv', encoding='utf-8')
-    rds2.process_data(dt.process_jira_components_data)
 
+    rds2.transform_function = dt.process_jira_components_data
+    rds2.transform_data()
+    
     #print(rds2.df)
     return rds2
 
