@@ -44,7 +44,7 @@ def load_jira_data():
 
     rds2.transform_function = dt.process_jira_components_data
     rds2.transform_data()
-    
+
     #print(rds2.df)
     return rds2
 
@@ -97,10 +97,10 @@ print("get local data")
 rdss = get_local_data()
 print_both_datasets(rdss[0], rdss[1])
 # re-opening csvs that were created by panda seem to have extra first column
-rdss[0].process_data(dt.drop_first_column)
-rdss[0].process_data(dt.process_component_sheets_data)
-rdss[1].process_data(dt.drop_first_column)
-rdss[1].process_data(dt.process_jira_components_data)
+rdss[0].transform_data_with_function(dt.drop_first_column)
+rdss[0].transform_data_with_function(dt.process_component_sheets_data)
+rdss[1].transform_data_with_function(dt.drop_first_column)
+rdss[1].transform_data_with_function(dt.process_jira_components_data)
 result = do_the_reconciliation(rdss[0], rdss[1])
 
 update_data(result);

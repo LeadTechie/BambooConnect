@@ -1,5 +1,5 @@
 ,0,1,2,3,4
-0,"Remove All contents in Sheet1 and copy and base A1:E5 then run ""rake e2e""",,Extra Title Info,,
+0,Test Data...,,,,
 1,Time Stamp,id,name,owner,description
 2,2021-09-26T21:09:21+02:00,10000,TestComponent1,<No Owner>,TestComponent1 Description
 3,2021-09-26T21:09:21+02:00,999,,,
