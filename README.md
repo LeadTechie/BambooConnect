@@ -1,14 +1,29 @@
 # py_recon_tools
 
-1. Convenient high level wrappers for easy access to data from JIRA & Google Sheets and more to come
-2. Standard library of transformations to clean and reconcile data
-3. Simple wrappers to update and save results in Google Sheets
+**Free The Data:** Ensure clean, simplified, up to date data safely stored and at your fingertips:
+
+How much time do you waste manually keeping track of data from multiple systems. Different systems, different formats. Is your list up to date? How to match users or ids across multiple systems?
+
+**Py Recon Tools is a lightweight ETL (Extract, Transform, Load) library with templates and examples. It enables developers to quickly extract, transform, reconcile and then store resulting data securely. This avoids time consuming manual error prone tasks.**
 
 ### Recon Tools Overview
 ![ReconToolsArchitectureDiagramOverview.jpg](readme/ReconToolsArchitectureDiagramOverview.jpg?raw=true)
 
+
+If you’re low volume (<10k records), low frequency (max hourly) you already have GitHub and Google Sheets available to you and you have development skills then **Py Recon Tools is for you.**
+
+Example uses:
+- How to link component documentation from the JIRA with an extended Google sheets list?
+- How can you tell who has a JIRA account but it not yet in GitHub?
+- How to keep multiple team lists with so many changes and new starters across different systems?
+
+
 ### Recon Tools High Level Architecture And Flow
 ![ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg](readme/ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg?raw=true)
+
+### Recon Tools Hosting / Production Setup
+![ReconToolHostingProductionSetup.jpg](readme/ReconToolHostingProductionSetup.jpg?raw=true)
+
 
 ### Recon Tools Test Approach
 ![ReconToolsArchitectureDiagramTestApproach.jpg](readme/ReconToolsArchitectureDiagramTestApproach.jpg?raw=true)
@@ -86,3 +101,7 @@ python -m unittest discover -s test/end2end -p 'test_*.py'
 python poc_e2e_script.py
 
 ```
+
+### Py Recon Tools Docs
+
+See this [Google Presentations](https://docs.google.com/presentation/d/1nKeGEwgP3xvYbnmz0WEcTWl8kNGfS48Pi-6drKdufVo/edit#slide=id.gf47d2de6cc_0_43) for latest version of these docs
