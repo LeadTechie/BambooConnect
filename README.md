@@ -1,28 +1,32 @@
-# py_recon_tools
-
-**Free The Data:** Ensure clean, simplified, up to date data safely stored and at your fingertips:
+# Bamboo Connect
 
 How much time do you waste manually keeping track of data from multiple systems. Different systems, different formats. Is your list up to date? How to match users or ids across multiple systems?
 
-**Py Recon Tools is a lightweight ETL (Extract, Transform, Load) library with templates and examples. It enables developers to quickly extract, transform, reconcile and then store resulting data securely. This avoids time consuming manual error prone tasks.**
+**Bamboo Connect is a lightweight ETL (Extract, Transform, Load) library with examples and templates. It enables developers to quickly extract, transform, reconcile and then load resulting data securely. This avoids time consuming manual error prone tasks.**
 
-### Recon Tools Overview
-![ReconToolsArchitectureDiagramOverview.jpg](readme/ReconToolsArchitectureDiagramOverview.jpg?raw=true)
+If you’re low volume (<10k records), low frequency (max hourly), already have GitHub and Google Sheets available to you and have development skills then Bamboo Connect is for you.
+
+Example use cases:
+- How to link component documentation from the JIRA with an extended Google sheets list
+- How can you tell who has a JIRA account but it not yet in GitHub
+- How to keep multiple team lists with so many changes and new starters across different systems
 
 
-If you’re low volume (<10k records), low frequency (max hourly) you already have GitHub and Google Sheets available to you and you have development skills then **Py Recon Tools is for you.**
+### Overview
+![BambooConnect-Intro-Architecture-Overview.jpg](readme/BambooConnect-Intro-Architecture-Overview.jpg?raw=true)
 
-Example uses:
-- How to link component documentation from the JIRA with an extended Google sheets list?
-- How can you tell who has a JIRA account but it not yet in GitHub?
-- How to keep multiple team lists with so many changes and new starters across different systems?
+![BambooConnect-Intro-Architecture-Overview1.jpg](readme/BambooConnect-Intro-Architecture-Overview1.jpg?raw=true)
+
+### Quick View
+
+![BambooConnect-Intro-Architecture-Overview2.jpg](readme/BambooConnect-Intro-Architecture-Overview2.jpg?raw=true)
 
 
 ### Recon Tools High Level Architecture And Flow
 ![ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg](readme/ReconToolsArchitectureDiagramHighLevelArchitectureAndFlow.jpg?raw=true)
 
 ### Recon Tools Hosting / Production Setup
-![ReconToolHostingProductionSetup.jpg](readme/ReconToolHostingProductionSetup.jpg?raw=true)
+![BambooConnect-Intro-Architecture-Overview3.jpg](readme/BambooConnect-Intro-Architecture-Overview3.jpg?raw=true)
 
 
 ### Recon Tools Test Approach
