@@ -46,23 +46,6 @@ def print_debug(df, extra_info=""):
     print(df.to_numpy().tolist())
     print(tabulate(df, headers='keys', tablefmt='psql'))
 
-
-def to_remove():
-    #df = df.iloc[: , 1:] # removes the first column
-    sheetdf = sheetdf[1:] #Take the data less the header row
-
-    sheetdf.columns = new_header #Set the header row as the df header
-
-
-    jiradf = jiradf.iloc[: , 1:]
-
-
-    new_header = sheetdf.iloc[0] #Get the first row for the header
-    sheetdf = sheetdf[1:] #Take the data less the header row
-
-    sheetdf.columns = new_header #Set the header row as the df header
-    jiradf.columns = new_header
-
 def flatten_jira_components_with_datetime_stamp(component_json):
     return flatten_jira_components(component_json, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
