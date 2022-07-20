@@ -27,7 +27,7 @@ jobs:
             # exit-zero treats all errors as warnings.
             flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         - name: Build binary wheel and a source tarball
-        run: python bamboo_connect_test_main sdist
+        run: python bamboo_connect_test_main.py sdist
         - name: Publish distribution to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
