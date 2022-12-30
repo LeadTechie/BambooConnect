@@ -6,7 +6,7 @@ import pandas as pd
 import json
 import numpy as np
 
-class Recon_DataSet:
+class Recon_DataSet():
 
     def __init__(self, connector = Base_Connector(), df_in = None):
         self.bc = connector # A Py Recon Tools connector, eg JIRA, GoogleSheets Connector

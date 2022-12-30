@@ -1,4 +1,4 @@
-class Base_Connector:
+class Base_Connector():
     def __init__(self):
         None
 

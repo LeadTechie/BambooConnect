@@ -1,14 +1,21 @@
+
+
+from connectors.googlesheets_connector import GoogleSheets_Connector
+#print (connectors.__file__)
+
+from transform.recon_dataset import Recon_DataSet
+from connectors.jira_connector import Jira_Connector
+
+import support.authentication_support as auth_sup
+import transform.data_translations as dt
+
 import pandas as pd
 import numpy as np
 import json
 import os
-from connectors.googlesheets_connector import GoogleSheets_Connector
-from connectors.jira_connector import Jira_Connector
-import authentication_support as auth_sup
 
-import data_translations as dt
-
-from recon_dataset import Recon_DataSet
+#from transform.recon_dataset import Recon_DataSet
+#from transform import data_translations
 
 def load_google_data():
     gsc = GoogleSheets_Connector()
@@ -88,19 +95,23 @@ def get_local_data():
 
     return rds1, rds2
 
-rdss = get_new_data()
-result = do_the_reconciliation(rdss[0], rdss[1])
-update_data(result);
+def e2e_test():
+    rdss = get_new_data()
+    result = do_the_reconciliation(rdss[0], rdss[1])
+    update_data(result);
 
 
-print("get local data")
-rdss = get_local_data()
-print_both_datasets(rdss[0], rdss[1])
-# re-opening csvs that were created by panda seem to have extra first column
-rdss[0].transform_data_with_function(dt.drop_first_column)
-rdss[0].transform_data_with_function(dt.process_component_sheets_data)
-rdss[1].transform_data_with_function(dt.drop_first_column)
-rdss[1].transform_data_with_function(dt.process_jira_components_data)
-result = do_the_reconciliation(rdss[0], rdss[1])
+    print("get local data")
+    rdss = get_local_data()
+    print_both_datasets(rdss[0], rdss[1])
+    # re-opening csvs that were created by panda seem to have extra first column
+    rdss[0].transform_data_with_function(dt.drop_first_column)
+    rdss[0].transform_data_with_function(dt.process_component_sheets_data)
+    rdss[1].transform_data_with_function(dt.drop_first_column)
+    rdss[1].transform_data_with_function(dt.process_jira_components_data)
+    result = do_the_reconciliation(rdss[0], rdss[1])
 
-update_data(result);
+    update_data(result);
+
+if __name__ == '__main__':
+    e2e_test()

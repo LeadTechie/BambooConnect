@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 from connectors.jira_connector import Jira_Connector
-import data_translations as dt
+from transform import data_translations as dt
 
 class Test_Unit_Jira_Connector(unittest.TestCase):
 

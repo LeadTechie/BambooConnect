@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-import authentication_support as auth_sup
+import support.authentication_support as auth_sup
 #import py_recon_tools.jira_connector.Jira_Connector
 
 class Test_Authentication_Support(unittest.TestCase):
