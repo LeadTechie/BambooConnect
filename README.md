@@ -59,6 +59,8 @@ python authentication_support.py
 ```
 This will create the base64 encoded string you need for the CREDENTIALS_JSON
 
+Generate your JIRA Token https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
+
 ```
 export RECON_TOOLS_JIRA_EMAIL="<Your value here>"
 export RECON_TOOLS_JIRA_TOKEN="<Your value here>""
