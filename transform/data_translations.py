@@ -16,6 +16,10 @@ def make_first_row_header(df):
     df = df[1:] # remove the header row from the data
     return df
 
+def drop_first_row(df):
+    df = df.iloc[1: , :]
+    return df
+
 def drop_first_column(df):
     df = df.iloc[: , 1:]
     return df
@@ -26,15 +30,36 @@ def process_component_sheets_data(df):
     df = standardise_component_data(df)
     return df
 
+def process_component_sheets_data2(df):
+    df = df[2:] # remove first 2 info lines
+    df = make_first_row_header(df)
+    print(" DATA...")
+    print(df)
+    df = standardise_component_data(df)
+    return df
+
+
 def process_jira_components_data(df):
     df.columns = ["Time Stamp","id","name","owner","description"]
     df = standardise_component_data(df)
     return df
 
+# remove empty string ids and convert index colum types to int
 def standardise_component_data(df):
+    pd.to_numeric(df['id'], errors='coerce')
+    df = df.replace('NaN',0)
+    df = df.replace('',0)
+    df['id']=df['id'].fillna(0)
     df['id']=df['id'].astype('int')
+    #df.id = df.id.fillna(0)
+    print ("Just id=0")
+    print (df.id == 0)
+    print ("Just id=''")
+    print (df.id == '')
+    #df['First Season'] = (df['First Season'] > 1990).astype(int)
     df = df.set_index('id', drop=False)
     df.index.name = 'index'
+    df.index = df.index.fillna(0)
     df.index = df.index.astype('int')
     return df
 
