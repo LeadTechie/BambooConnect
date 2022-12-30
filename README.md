@@ -92,7 +92,7 @@ python -m unittest discover -s test/system -p 'test_*.py'
 
 TODO: Currently this requires access to a test JIRA account
 ```
-python poc_e2e_script.py
+python poc_test.py
 ```
 
 ### Running Tests Locally
@@ -104,7 +104,7 @@ python -m unittest discover -s test/system -p 'test_*.py'
 python -m unittest discover -s test/integration -p 'test_*.py'
 python -m unittest discover -s test/end2end -p 'test_*.py'
 
-python poc_e2e_script.py
+python poc_test.py
 
 ```
 
