@@ -34,6 +34,7 @@ class Jira_Connector(Base_Connector):
     def get_clean_data(self):
         return self.clean_data(self.get_raw_data())
 
+    # this should be overwritten with a function that cleans the data
     def clean_data():
         return ""
 

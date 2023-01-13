@@ -6,5 +6,8 @@ import support.poc_e2e_script as e2e
 jobss = Jira_OBSS_Plugin_Connector()
 print(jobss.quicktest())
 jobss.initialse_auth("OBSS_TISJWT", "OBSS_FULL_URL")
-exportId = jobss.request_export()
-print("ID " + exportId)
+
+rds = Recon_DataSet(jobss)
+df = rds.extract_data()
+print(df.columns)
+print(df)
