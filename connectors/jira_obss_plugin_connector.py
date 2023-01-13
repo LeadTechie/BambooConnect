@@ -16,9 +16,9 @@ class Jira_OBSS_Plugin_Connector(Base_Connector):
         self.fullURL = ""
         self.clean_data = self.default_clean_data
 
-    def initialse_auth(self, tisjwt_env, jira_obss_fullURL_env):
+    def initialse_auth(self, tisjwt_env, url_query):
         self.tisjwt =  os.getenv(tisjwt_env)
-        self.fullURL = os.getenv(jira_obss_fullURL_env)
+        self.fullURL = url_query + "&tisjwt=" + self.tisjwt
         #https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
 
     def initialse_query(self, query_string, clean_data_in=None):
