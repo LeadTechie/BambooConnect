@@ -63,14 +63,21 @@ class Base_Extractor():
 
         file_path = os.path.join(self.cache_dir, key_name)
         with open(file_path, "w") as file:
-            file.write(self.extract)
+            if len(file_path)>3 and file_path[-4:] == "json":
+                json.dump(self.extract, file)
+            else:
+                file.write(self.extract)
 
     def load_results_from_file(self, key_name):
         file_path = os.path.join(self.cache_dir, key_name)
         if os.path.isfile(file_path):
             with open(file_path, "r") as file:
-                self.extract = file.read()
-                self.extract_status_code = 1
+                if len(file_path)>3 and file_path[-4:] == "json":
+                    self.extract = json.dumps(json.load(file))
+                    self.extract_status_code = 1
+                else:
+                    self.extract = file.read()
+                    self.extract_status_code = 1
                 return True
         else:
             return False
@@ -165,6 +172,7 @@ class Google_Drive_Sheets_Extractor(Base_Extractor):
 
     def extract_from_web(self):
         self.get_sheets_content()
+        print(type(self.get_sheets_content()))
         return "200"
 
 # +
@@ -277,8 +285,8 @@ class Test_Google_Drive_Sheets_Extractor(unittest.TestCase):
             "credentials_json": decode_credentials_json()
         }
         gdse = Google_Drive_Sheets_Extractor(parameters,"test_data")
-        sheets_content = gdse.extract_data("")
-        self.assertEqual(sheets_content, expected, "Content should be read from file from Google Drive")
+        sheets_content = gdse.extract_data("google_sheets_file.json")
+        self.assertEquals(sheets_content, expected, "Content should be read from file from Google Drive")
 
 
 logging.basicConfig(level=logging.ERROR)
