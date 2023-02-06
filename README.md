@@ -5,11 +5,30 @@ conda create -n python3-9-12 python=3.9.12 anaconda
 conda activate python3-9-12  
 ```
 
+## Setup Environment Variables
+
 dev environment:
 
+```
+export JIRA_TOKEN=<token>
+export JIRA_EMAIL=<email>
+export CREDENTIALS_JSON=<email>
+
+echo "$JIRA_TOKEN"
+echo "$JIRA_EMAIL"
+echo "$CREDENTIALS_JSON"
+```
+
+Generating Tokens:
+- JIRA_TOKEN https://id.atlassian.com/manage-profile/security/api-tokens.
+- Google CREDENTIALS_JSON: https://github.com/LeadTechie/BambooConnect/blob/v3/readme/README.md
+
+```
 pip install notebook
 pip install jupytext
+```
 
+```
 jupytext --to notebook extractor.py
 jupytext --set-formats ipynb,py extractor.ipynb
 jupytext --sync extractor.ipynb
@@ -17,19 +36,14 @@ jupytext --sync extractor.ipynb
 jupytext --to notebook extract-translate-load-sample.py
 jupytext --set-formats ipynb,py extract-translate-load-sample.ipynb
 jupytext --sync extract-translate-load-sample.ipynb
+```
 
+
+```
 jupyter notebook
+```
 
-Let the dev being
 
-export JIRA_TOKEN=<token>
-export JIRA_EMAIL=<email>
-
-echo "$JIRA_TOKEN"
-echo "$JIRA_EMAIL"
-
-Generating Tokens:
-- JIRA_TOKEN https://id.atlassian.com/manage-profile/security/api-tokens.
 
 
 # Bamboo Connect
