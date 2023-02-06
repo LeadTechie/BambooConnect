@@ -36,6 +36,19 @@ jupytext --sync extractor.ipynb
 jupytext --to notebook extract-translate-load-sample.py
 jupytext --set-formats ipynb,py extract-translate-load-sample.ipynb
 jupytext --sync extract-translate-load-sample.ipynb
+
+jupytext --to notebook loader.py
+jupytext --set-formats ipynb,py loader.ipynb
+jupytext --sync loader.ipynb
+
+jupytext --to notebook google_drive_file_extractor.py
+jupytext --set-formats ipynb,py google_drive_file_extractor.ipynb
+jupytext --sync google_drive_file_extractor.ipynb
+
+jupytext --to notebook google_sheets_extractor.py
+jupytext --set-formats ipynb,py google_sheets_extractor.ipynb
+jupytext --sync google_sheets_extractor.ipynb
+
 ```
 
 
