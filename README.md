@@ -29,6 +29,29 @@ pip install jupytext
 ```
 
 ```
+jupytext --to notebook loaders/loader.py
+jupytext --set-formats ipynb,py loaders/loader.ipynb
+jupytext --sync loaders/loader.ipynb
+
+jupytext --to notebook loaders/google_sheets_loader.py
+jupytext --set-formats ipynb,py loaders/google_sheets_loader.ipynb
+jupytext --sync loaders/google_sheets_loader.ipynb
+
+jupytext --to notebook loaders/google_drive_file_loader.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
+jupytext --sync loaders/google_drive_file_loader.ipynb
+
+
+jupytext --to notebook loader.py
+jupytext --set-formats ipynb,py loader.ipynb
+jupytext --sync loader.ipynb
+
+jupytext --to notebook extractor.py
+jupytext --set-formats ipynb,py extractor.ipynb
+jupytext --sync extractor.ipynb
+
+
+
 jupytext --to notebook extractor.py
 jupytext --set-formats ipynb,py extractor.ipynb
 jupytext --sync extractor.ipynb

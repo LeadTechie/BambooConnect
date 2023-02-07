@@ -14,204 +14,300 @@
 #     name: python3
 # ---
 
-# +
-# !pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
 
 
-
-
-
+import time
+import json
 import os
-import io
-import base64
-import json
-import google.auth
-import googleapiclient.discovery
-from googleapiclient.http import MediaFileUpload
+import logging
+import requests
+import unittest
+
+
+
+
+
+
+
+
+
+class Base_Extractor():
+    cache_dir=""
+    extract = ""
+    extract_status_code = 0
+
+    def __init__(self, cache_dir=""):
+        self.cache_dir=cache_dir
+        None
+
+
+    #def extract(self, *argv):
+    #    None
+
+    def save_results_as_file(self, key_name):
+        if not os.path.exists(self.cache_dir):
+            os.makedirs(self.cache_dir)
+
+        file_path = os.path.join(self.cache_dir, key_name)
+        with open(file_path, "w") as file:
+            file.write(self.extract)
+
+    def load_results_from_file(self, key_name):
+        file_path = os.path.join(self.cache_dir, key_name)
+        if os.path.isfile(file_path):
+            with open(file_path, "r") as file:
+                self.extract = file.read()
+                self.extract_status_code = 1
+                return True
+        else:
+            return False
+
+    def set_query_details(self, *argv):
+        None
+
+
 
 # +
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+def measure_time(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"Execution time: {end - start} seconds")
+        return result
+    return wrapper
 
+@measure_time
+def my_function():
+    # Function implementation here
+    time.sleep(2)
 
-
-credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
-credentials_json = json.loads(credentials_string)
-pretty_json = json.dumps(credentials_json, indent=4)
-print(pretty_json)
-
-
-
-creds = Credentials.from_authorized_user_info(credentials_json)
-
-# Build the Google Drive API client
-service = build("drive", "v3", credentials=creds)
-
-# Create the subfolder
-folder_metadata = {
-    "name": "example_subfolder",
-    "mimeType": "application/vnd.google-apps.folder",
-    "parents": ["root"]
-}
-
-folder = service.files().create(body=folder_metadata, fields="id").execute()
-
-# Get the subfolder ID
-subfolder_id = folder["id"]
-
-# Define the file metadata
-file_metadata = {
-    "name": "example.txt",
-    "parents": [subfolder_id],
-    "mimeType": "text/plain"
-}
-
-# Define the file content
-file_content = "Example content for the file.".encode("utf-8")
-
-# Create the file in Google Drive
-file = service.files().create(body=file_metadata, media_body=file_content, fields="id").execute()
-
-# Print the file ID
-print("File ID:", file["id"])
-
+my_function()
 # -
 
 
 
+class Request_Extractor(Base_Extractor):
+    headers = {}
+    data = {}
+    url = "https://jsonplaceholder.typicode.com/todos/1"
+    post_type="GET"
+    auth = None
 
+    response = None
 
+    def __init__(self, request_parameters, cache_dir=""):
+        super().__init__(cache_dir=cache_dir)
+        self.load_request_parameters(request_parameters)
+        logging.debug("Request_Connector")
 
+    def load_request_parameters(self, request_parameters):
+        self.headers = request_parameters['headers'] if "headers" in request_parameters else {}
+        self.data = request_parameters['data'] if "data" in request_parameters else {}
+        self.url = request_parameters['url'] if "url" in request_parameters else "https://jsonplaceholder.typicode.com/todos/1"
+        self.post_type=request_parameters['post_type'] if "url" in request_parameters else "GET"
+        self.auth=request_parameters['auth'] if "auth" in request_parameters else None
 
-# +
-
-from googleapiclient.discovery import build
-#from google.oauth2.service_account import ServiceAccountCredentials
-from google.oauth2.service_account import Credentials
-import json
-
-
-def decode_credentials_json():
-    credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
-    credentials_json = json.loads(credentials_string)
-    #pretty_json = json.dumps(credentials_json, indent=4)
-    #print(pretty_json)
-    return credentials_json
-
-def get_google_drive_service(credentials_json):
-    # Load the private key file
-    #with open("service_account.json") as f:
-    #    private_key = json.load(f)
-
-    private_key = credentials_json['private_key']
-
-    #print("private key"+private_key)
-    # Create a ServiceAccountCredentials object
-    credentials = Credentials.from_service_account_info(credentials_json, scopes=["https://www.googleapis.com/auth/drive"])
-
-    # Get an access token from the credentials
-    #access_token = credentials.get_access_token().access_token
-
-    # Build the Google Drive API client using the access token
-    service = build("drive", "v3", credentials=credentials)
-    return service
-
-def list_all_directories_files(service):
-    # Example API call
-    results = service.files().list(q="mimeType='application/vnd.google-apps.folder'", fields="nextPageToken, files(id, name)").execute()
-    folders = results.get("files", [])
-
-    # Print the name of the first folder
-    if folders:
-        for folder in folders:
-            folder_id = folder['id'] 
-            print(f"The first folder is named: {folder}")
-            results = service.files().list(q=f"'{folder_id}' in parents", fields="nextPageToken, files(id, name)").execute()
-            files = results.get("files", [])
-            print(files)
-            # Print the names of the files in the folder
-            if files:
-                print("The files in the folder are:")
-                for file in files:
-                    print(file)
+    @measure_time
+    def extract_data(self, cache_key=""):
+        logging.debug("0")
+        if self.extract_status_code == 0:
+            logging.debug("1")
+            if self.load_results_from_file(cache_key):
+                logging.debug("2")
+                logging.debug(self.extract)
+                return self.extract
             else:
-                print("No files were found in the folder.")
+                temp_status = self.extract_from_web()
+                if cache_key != "":
+                    self.save_results_as_file(cache_key)
+                logging.debug("3 "+ str(temp_status))
+        logging.debug(self.extract)
+        logging.debug(type(self.extract))
+        return self.extract
 
-    else:
-        print("No folders were found.")
+    def get_response_status_code(self):
+        return self.extract_status_code
 
-
-    folder_id = folders[0]['id'] #"FOLDER_ID"
-
-    # Example API call to list files in the folder    
-
-def get_file_content(id):
-
-    json_test_file_id = "1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R"
-
-    file = service.files().get(fileId=json_test_file_id, fields='*').execute()
-
-    # Get the content of the file as a string
-    file_content = file.get('content')
-    #print(json.dumps(file, indent=4))
-
-    file = service.files().get_media(fileId=json_test_file_id).execute()
-    file_content = file.decode('utf-8')
-    return file_content
+    def extract_from_web(self):
+        response = requests.request(self.post_type, self.url, headers=self.headers, auth=self.auth, data=self.data)
+        self.extract_status_code = response.status_code
+        self.extract = response.content.decode()
+        logging.debug("extract_from_web" + self.extract)
+        return self.extract_status_code
 
 
-from io import BytesIO
 
-def save_file_in_folder(service, folder_id, file_name, file_content):
-    mimeType = ""
-    if file_name[-4:]=="json":
-        mimeType = "application/json"
-    else:
-        mimeType ="text/plain"
-    
-    file_metadata = {
-        "name": file_name,
-        "parents": [folder_id],
-        "mimeType": mimeType
-    }
-    
-    with open(file_name, "w") as file:
-        file.write(file_content)
 
-    file_id = get_file_by_name(service, file_name, folder_id)
 
-    if file_id:
-        #file_metadata['id'] = file_id['id']
-        media = MediaFileUpload(file_name, mimetype=mimeType)
-        file = service.files().update(fileId=file_id['id'], media_body=media).execute()
-    else:
-        media = MediaFileUpload(file_name, mimetype=mimeType)
-        file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()    
-    
-    print(f"File ID: {file['id']}")
-    return file
- 
-def get_file_by_name(service, file_name, folder_id):
-    query = "name='" + file_name + "' and trashed = false and parents in '" + folder_id + "'"
-    results = service.files().list(q=query, fields="nextPageToken, files(id, name)").execute()
-    items = results.get("files", [])
-    if not items:
-        return None
-    return items[0]    
 
-credentials_json = decode_credentials_json()
-#print(json.dumps(credentials_json, indent=4))
-service = get_google_drive_service(credentials_json)
-list_all_directories_files(service)
-file_content = get_file_content("1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R")
-print(file_content)
 
-folder_id="1Ba27PI1No-5wkzEaop4zfKrcLZiB_-9z"
-save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here and has been updated")
-    
 
+def generate_params_for_jira_component_list(email, token):
+    request_params = {}
+    request_params['headers'] = {}
+    request_params['data'] = {}
+    request_params['url'] = "https://leadtechie.atlassian.net/rest/api/3/project/TEST/components"
+    request_params['post_type']="GET"
+    request_params['auth'] = (email, token)
+    request_params['headers'] =  {
+            "Accept": "application/json",
+            'Content-Type': 'application/json'
+        }
+    return request_params
+
+
+
+
+
+logging.basicConfig(level=logging.ERROR)
+
+
+# +
+class Test_Request_Extractor(unittest.TestCase):
+
+    def test_placeholder_api_test(self):
+        expected = {
+          "userId": 1,
+          "id": 1,
+          "title": "delectus aut autem",
+          "completed": False
+        }
+
+        rc = Request_Extractor({},"./test_data/")
+        re = rc.extract_data("")
+        re_json = json.loads(re)
+        self.assertEqual(re_json, expected, "check json from placeholder external api")
+
+        re = rc.extract_data("jsonplaceholder.json")
+        re_json = json.loads(re)
+        self.assertEqual(re_json, expected, "check json from external and cache result")
+
+        re = rc.extract_data("jsonplaceholder.json")
+        re_json = json.loads(re)
+        self.assertEqual(re_json, expected, "check getting from in memory cache")
+
+        Request_Extractor({},"./test_data/")
+        re = rc.extract_data("jsonplaceholder.json")
+        re_json = json.loads(re)
+        self.assertEqual(re_json, expected, "check getting from in file cache")
+
+
+logging.basicConfig(level=logging.ERROR)
+
+unittest.main(argv=[''], verbosity=2, exit=False)
+# -
+
+
+
+# +
+
+
+def test_repeated_calls_to_check_cache():
+    jira_token = os.environ['JIRA_TOKEN']
+    jira_email = os.environ['JIRA_EMAIL']
+    request_params = generate_params_for_jira_component_list(jira_email, jira_token)
+
+    re_components = Request_Extractor(request_params, cache_dir="./test_data/")
+    components_string = re_components.extract_data("")
+    components_json = json.loads(components_string)
+    pretty_json = json.dumps(components_json, indent=4)
+    #print(pretty_json)
+
+    re_components = Request_Extractor(request_params, cache_dir="./test_data/")
+    components_string = re_components.extract_data("")
+    components_json = json.loads(components_string)
+    pretty_json = json.dumps(components_json, indent=4)
+    #print(pretty_json)
+
+    re_components = Request_Extractor(request_params, cache_dir="./test_data/")
+    components_string = re_components.extract_data("component_list.json")
+    components_json = json.loads(components_string)
+    pretty_json = json.dumps(components_json, indent=4)
+    #print(pretty_json)
+
+    re_components = Request_Extractor(request_params, cache_dir="./test_data/")
+    components_string = re_components.extract_data("component_list.json")
+    components_json = json.loads(components_string)
+    pretty_json = json.dumps(components_json, indent=4)
+    #print(pretty_json)
+
+    components_string = re_components.extract_data("component_list.json")
+    components_json = json.loads(components_string)
+    pretty_json = json.dumps(components_json, indent=4)
+    print(pretty_json)
+
+test_repeated_calls_to_check_cache()
 # -
 
 
 
 
+
+
+
+# +
+
+def flatten_jira_components_with_datetime_stamp(component_json):
+    return flatten_jira_components(component_json, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+# Takes the standard JSON from eg  https://leadtechie.atlassian.net/rest/api/3/project/TEST/components
+# and pulls this out to a flat format: time_stampe, id, name, owners, description
+def flatten_jira_components(component_json, time_stamp='2022-06-27 22:54:45'):
+    results = []
+    for component in component_json:
+        results.append( [ time_stamp,
+            component["id"],
+            component["name"],
+            component['lead']['displayName'] if 'lead' in component else "<No Owner>",
+            component['description'] if 'description' in component else "<No Description>"
+            ])
+    return results
+# -
+
+
+
+
+
+
+
+# +
+class Test_Extract_Component_List(unittest.TestCase):
+
+    def test_component_list(self):
+        expected = {
+            "self": "https://leadtechie.atlassian.net/rest/api/3/component/10000",
+            "id": "10000",
+            "name": "TestComponent1",
+            "description": "TestComponent1 Description",
+            "assigneeType": "PROJECT_DEFAULT",
+            "realAssigneeType": "PROJECT_DEFAULT",
+            "isAssigneeTypeValid": False,
+            "project": "TEST",
+            "projectId": 10000
+        }
+
+        jira_token = os.environ['JIRA_TOKEN']
+        jira_email = os.environ['JIRA_EMAIL']
+        request_params = generate_params_for_jira_component_list(jira_email, jira_token)
+
+        re_components = Request_Extractor(request_params, cache_dir="./test_data/")
+        components_string = re_components.extract_data("")
+        re_components_json = json.loads(components_string)
+
+        pretty_json = json.dumps(re_components_json, indent=4)
+        self.assertEqual(re_components_json[0], expected, "check first component")
+
+
+logging.basicConfig(level=logging.ERROR)
+
+unittest.main(argv=[''], verbosity=2, exit=False)
+
+# +
+
+if __name__ == "__main__":
+    unittest.main(argv=[''], verbosity=2, exit=False)
+# -
+
+# from transform.recon_dataset import Recon_DataSet
+# from transform import data_translations
