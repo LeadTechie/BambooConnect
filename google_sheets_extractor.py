@@ -73,7 +73,7 @@ class Base_Extractor():
         if os.path.isfile(file_path):
             with open(file_path, "r") as file:
                 if len(file_path)>3 and file_path[-4:] == "json":
-                    self.extract = json.dumps(json.load(file))
+                    self.extract = json.load(file)
                     self.extract_status_code = 1
                 else:
                     self.extract = file.read()
@@ -286,7 +286,7 @@ class Test_Google_Drive_Sheets_Extractor(unittest.TestCase):
         }
         gdse = Google_Drive_Sheets_Extractor(parameters,"test_data")
         sheets_content = gdse.extract_data("google_sheets_file.json")
-        self.assertEquals(sheets_content, expected, "Content should be read from file from Google Drive")
+        self.assertEqual(sheets_content, expected, "Content should be read from file from Google Drive")
 
 
 logging.basicConfig(level=logging.ERROR)
