@@ -195,7 +195,7 @@ class Test_Google_Drive_File_Loader(unittest.TestCase):
         }
         gdfe = Google_Drive_File_Loader(parameters,"../test_data")
         file_content = gdfe.save_data("hello, first file saved!")
-        self.assertEqual(file_content, expected, "Content should be read from file from Google Drive")
+        self.assertEqual(file_content, expected, "Content should be saved to Google Drive")
 
 
 logging.basicConfig(level=logging.ERROR)
@@ -263,7 +263,7 @@ def list_all_directories_files(service):
 
     folder_id = folders[0]['id'] #"FOLDER_ID"
 
-    
+
 # -
 
 

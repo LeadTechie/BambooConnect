@@ -106,7 +106,7 @@ my_function()
 
 # -
 
-class Google_Drive_Sheets_Extractor(Base_Extractor):
+class Google_Sheets_Extractor(Base_Extractor):
     file_id = ""
     tab_name = ""
     data_range = ""
@@ -272,7 +272,7 @@ save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here
 
 
 # +
-class Test_Google_Drive_Sheets_Extractor(unittest.TestCase):
+class Test_Google_Sheets_Extractor(unittest.TestCase):
 
     def test_Google_Sheets_Extractor(self):
         expected = [['Bamboo Test A1', 'Bamboo Test B1'],
@@ -280,12 +280,13 @@ class Test_Google_Drive_Sheets_Extractor(unittest.TestCase):
 
         parameters = {
             "file_id": "12keD9VYi6yrQ4nP7JJh95M8lmyTqIJw-V4IocOcyjYM",
-            "tab": "sheet1",
+            "tab_name": "sheet1",
             "data_range": "A1:B2",
             "credentials_json": decode_credentials_json()
         }
-        gdse = Google_Drive_Sheets_Extractor(parameters,"test_data")
-        sheets_content = gdse.extract_data("google_sheets_file.json")
+        gdse = Google_Sheets_Extractor(parameters,"test_data")
+        #sheets_content = gdse.extract_data("google_sheets_file.json")
+        sheets_content = gdse.extract_data()
         self.assertEqual(sheets_content, expected, "Content should be read from file from Google Drive")
 
 
