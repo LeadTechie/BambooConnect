@@ -1,3 +1,87 @@
+# Bamboo Connect v0.0.4 Quick Start
+
+```
+conda create -n python3-9-12 python=3.9.12 anaconda  
+conda activate python3-9-12  
+```
+
+## Setup Environment Variables
+
+dev environment:
+
+```
+export JIRA_TOKEN=<token>
+export JIRA_EMAIL=<email>
+export CREDENTIALS_JSON=<email>
+
+echo "$JIRA_TOKEN"
+echo "$JIRA_EMAIL"
+echo "$CREDENTIALS_JSON"
+```
+
+Generating Tokens:
+- JIRA_TOKEN https://id.atlassian.com/manage-profile/security/api-tokens.
+- Google CREDENTIALS_JSON: https://github.com/LeadTechie/BambooConnect/blob/v3/readme/README.md
+
+```
+pip install notebook
+pip install jupytext
+```
+
+```
+jupytext --to notebook loaders/loader.py
+jupytext --set-formats ipynb,py loaders/loader.ipynb
+jupytext --sync loaders/loader.ipynb
+
+jupytext --to notebook loaders/google_sheets_loader.py
+jupytext --set-formats ipynb,py loaders/google_sheets_loader.ipynb
+jupytext --sync loaders/google_sheets_loader.ipynb
+
+jupytext --to notebook loaders/google_drive_file_loader.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
+jupytext --sync loaders/google_drive_file_loader.ipynb
+
+
+jupytext --to notebook loader.py
+jupytext --set-formats ipynb,py loader.ipynb
+jupytext --sync loader.ipynb
+
+jupytext --to notebook extractor.py
+jupytext --set-formats ipynb,py extractor.ipynb
+jupytext --sync extractor.ipynb
+
+
+
+jupytext --to notebook extractor.py
+jupytext --set-formats ipynb,py extractor.ipynb
+jupytext --sync extractor.ipynb
+
+jupytext --to notebook extract-translate-load-sample.py
+jupytext --set-formats ipynb,py extract-translate-load-sample.ipynb
+jupytext --sync extract-translate-load-sample.ipynb
+
+jupytext --to notebook loader.py
+jupytext --set-formats ipynb,py loader.ipynb
+jupytext --sync loader.ipynb
+
+jupytext --to notebook google_drive_file_extractor.py
+jupytext --set-formats ipynb,py google_drive_file_extractor.ipynb
+jupytext --sync google_drive_file_extractor.ipynb
+
+jupytext --to notebook google_sheets_extractor.py
+jupytext --set-formats ipynb,py google_sheets_extractor.ipynb
+jupytext --sync google_sheets_extractor.ipynb
+
+```
+
+
+```
+jupyter notebook
+```
+
+
+
+
 # Bamboo Connect
 
 How much time do you waste manually keeping track of data from multiple systems. Different systems, different formats. Is your list up to date? How to match users or ids across multiple systems?
