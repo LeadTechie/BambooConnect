@@ -25,8 +25,9 @@ def drop_first_column(df):
     return df
 
 def process_component_sheets_data(df):
-    df = df[1:] # remove first info line
     df = make_first_row_header(df)
+    #df = df[1:] # remove first info line
+
     df = standardise_component_data(df)
     return df
 
@@ -46,16 +47,14 @@ def process_jira_components_data(df):
 
 # remove empty string ids and convert index colum types to int
 def standardise_component_data(df):
-    pd.to_numeric(df['id'], errors='coerce')
-    df = df.replace('NaN',0)
-    df = df.replace('',0)
-    df['id']=df['id'].fillna(0)
-    df['id']=df['id'].astype('int')
+    #pd.to_numeric(df['id'], errors='coerce')
+    #df = df.replace('NaN',0)
+    #df = df.replace('',0)
+    #df['id']=df['id'].fillna(0)
+    #df['id']=df['id'].astype('int')
     #df.id = df.id.fillna(0)
-    print ("Just id=0")
-    print (df.id == 0)
-    print ("Just id=''")
-    print (df.id == '')
+    #print ("Just id=0")
+    #print (df.id == 0)
     #df['First Season'] = (df['First Season'] > 1990).astype(int)
     df = df.set_index('id', drop=False)
     df.index.name = 'index'

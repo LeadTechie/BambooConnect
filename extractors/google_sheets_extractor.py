@@ -44,6 +44,7 @@ import json
 
 
 
+
 class Base_Extractor():
     cache_dir=""
     extract = ""
@@ -149,6 +150,12 @@ class Google_Sheets_Extractor(Base_Extractor):
     def get_response_status_code(self):
         return self.extract_status_code
 
+    def decode_credentials_json():
+        credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
+        credentials_json = json.loads(credentials_string)
+        #pretty_json = json.dumps(credentials_json, indent=4)
+        #print(pretty_json)
+        return credentials_json
 
     def get_sheets_content(self):
         #Build the Google Sheets API client
@@ -211,7 +218,6 @@ def list_all_directories_files(service):
 
 
 
-
 from io import BytesIO
 
 def save_file_in_folder(service, folder_id, file_name, file_content):
@@ -251,24 +257,19 @@ def get_file_by_name(service, file_name, folder_id):
         return None
     return items[0]
 
-credentials_json = decode_credentials_json()
+#credentials_json = decode_credentials_json()
 #print(json.dumps(credentials_json, indent=4))
-service = get_google_drive_service(credentials_json)
-list_all_directories_files(service)
-file_content = get_file_content("1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R")
-print(file_content)
+#service = get_google_drive_service(credentials_json)
+#list_all_directories_files(service)
+#file_content = get_file_content("1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R")
+#print(file_content)
 
-folder_id="1Ba27PI1No-5wkzEaop4zfKrcLZiB_-9z"
-save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here and has been updated")
+#folder_id="1Ba27PI1No-5wkzEaop4zfKrcLZiB_-9z"
+#save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here and has been updated")
 
 # -
 
-    def decode_credentials_json():
-        credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
-        credentials_json = json.loads(credentials_string)
-        #pretty_json = json.dumps(credentials_json, indent=4)
-        #print(pretty_json)
-        return credentials_json
+
 
 
 # +

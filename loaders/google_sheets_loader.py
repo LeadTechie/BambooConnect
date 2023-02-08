@@ -36,6 +36,12 @@ import json
 # -
 
 
+def decode_credentials_json():
+    credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
+    credentials_json = json.loads(credentials_string)
+    #pretty_json = json.dumps(credentials_json, indent=4)
+    #print(pretty_json)
+    return credentials_json
 
 class Base_Loader():
     cache_dir=""
@@ -188,12 +194,7 @@ unittest.main(argv=[''], verbosity=2, exit=False)
 # -
 
 
-    def decode_credentials_json():
-        credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
-        credentials_json = json.loads(credentials_string)
-        #pretty_json = json.dumps(credentials_json, indent=4)
-        #print(pretty_json)
-        return credentials_json   
+
 
 
 

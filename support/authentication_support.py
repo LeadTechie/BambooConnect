@@ -7,6 +7,13 @@ import os
 
 #Take the credentials.json file and base64 encode it so you can add as key in environment variable and GitHub secret
 
+def decode_credentials_json():
+    credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
+    credentials_json = json.loads(credentials_string)
+    #pretty_json = json.dumps(credentials_json, indent=4)
+    #print(pretty_json)
+    return credentials_json
+
 def encode_json_file_to_base64(filename='../credentials.json'):
     with open(filename) as jsonfile:
         data = json.load(jsonfile)
