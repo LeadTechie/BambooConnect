@@ -43,6 +43,8 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import unittest
+import logging
 
 # from transform.recon_dataset import Recon_DataSet
 # from transform import data_translations
@@ -102,11 +104,7 @@ def load_jira_data():
 
 # -
 
-def get_new_data():
-    rds2 = load_jira_data()
-    rds1 = load_google_data()
 
-    return rds1, rds2
 
 def print_both_datasets(rds1, rds2):
     print("JIRA")
@@ -124,11 +122,21 @@ def do_the_reconciliation(rds1, rds2):
     return result
 
 # +
-def read_clean_test_data():
-    expected = [['TestComponent1'],
-                ['TestComponent2'],
-                ['TestComponent3']]
+def read_clean_test_expected_results(tab):
+    parameters = {
+        "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
+        "tab_name": tab,
+        "data_range": "B1:E",
+        "credentials_json": auth_sup.decode_credentials_json()
+    }
+    gdse = Google_Sheets_Extractor(parameters,"../test_data/")
+    sheets_content = gdse.extract_data()
+    google_sheets_df = pd.DataFrame(sheets_content)
+    print(google_sheets_df)
+    return google_sheets_df
 
+
+def read_clean_test_data():
     parameters = {
         "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
         "tab_name": "SampleData",
@@ -164,14 +172,24 @@ def write_results_data(data_to_save):
     return result
 
 
-def update_data(result):
+def load_jira_and_google_data_and_reconcile_and_save_results():
     clean_data = read_clean_test_data()
     write_clean_test_data(clean_data.values.tolist())
-    print(result)
+
+    rds1 = load_google_data()
+    rds2 = load_jira_data()
+
+    rds1[["id"]] = rds1[["id"]].astype(int)
+    rds1.index = rds1.index.astype(int)
+
+    rds2[["id"]] = rds2[["id"]].astype(int)
+    rds2.index = rds2.index.astype(int)
+
     
-    rds1, rds2 = get_new_data()
     result = do_the_reconciliation(rds1, rds2)
+    results = write_results_data(result.values.tolist())
     print(result)
+    return result
     #write_results_data(result)
     
     #gsc.reset_sheet_data("Recon Tools Test Data", "write-data-test")
@@ -179,48 +197,37 @@ def update_data(result):
     #gsc.update_data("Recon Tools Test Data", "write-data-test", "A3", result.to_numpy().tolist() )
     #print("done")
     
-update_data(None)    
-
-
+  
 # -
-
-def get_local_data():
-    sheetdf = pd.read_csv('test_data/sheetdf.csv', encoding='utf-8')
-    rds1 = Recon_DataSet()
-    rds1.df = sheetdf
-
-    rds2 = Recon_DataSet()
-    rds2.df = pd.read_csv('test_data/jiradf.csv', encoding='utf-8')
-
-    return rds1, rds2
-
-def e2e_test():
-    rdss = get_new_data()
-    result = do_the_reconciliation(rdss[0], rdss[1])
-    update_data(result);
-
-
-    print("get local data")
-    rdss = get_local_data()
-    print_both_datasets(rdss[0], rdss[1])
-    # re-opening csvs that were created by panda seem to have extra first column
-    rdss[0].transform_data_with_function(dt.drop_first_column)
-    rdss[0].transform_data_with_function(dt.process_component_sheets_data)
-    rdss[1].transform_data_with_function(dt.drop_first_column)
-    rdss[1].transform_data_with_function(dt.process_jira_components_data)
-    result = do_the_reconciliation(rdss[0], rdss[1])
-
-    update_data(result);
 
 
 
 def new_e2e_test():
     load_google_data()
-    load_jira_data()    
+    load_jira_data()
+    update_data()  
+
+
+# +
+class Test_Google_Sheets_Extractor(unittest.TestCase):
+
+    def test_Google_Sheets_Extractor(self):
+        load_jira_and_google_data_and_reconcile_and_save_results()
+        actual = read_clean_test_expected_results("Sheet1") 
+        expected = read_clean_test_expected_results("ExpectedResult") 
+
+        self.assertEquals(actual.values.tolist(), expected.values.tolist(), "Check that after reconciliation the results match the expected")
+
+
+logging.basicConfig(level=logging.ERROR)
+
+unittest.main(argv=[''], verbosity=2, exit=False)
+# -
+
 
 
 if __name__ == '__main__':
-    new_e2e_test()
+    load_jira_and_google_data_and_reconcile_and_save_results()
 
 
 
