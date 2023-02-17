@@ -94,7 +94,7 @@ def my_function():
     # Function implementation here
     time.sleep(0.2)
 
-my_function()
+#my_function()
 
 
 # -
@@ -188,10 +188,8 @@ class Test_Google_Sheets_Loader(unittest.TestCase):
         self.assertEqual(result['updatedCells'], 4, "It should return that 4 cells were updated")
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
-unittest.main(argv=[''], verbosity=2, exit=False)
-# -
 
 
 
@@ -224,7 +222,7 @@ unittest.main(argv=[''], verbosity=2, exit=False)
 
 # Support function. Needs updating and testing
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 def list_all_directories_files(service):
     # Example API call

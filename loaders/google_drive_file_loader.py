@@ -98,7 +98,7 @@ class Google_Drive_File_Loader(Base_Loader):
     mimeType = ""
     parent_id = ""
     credentials_json = ""
-    
+
 
     def __init__(self, request_parameters, cache_dir=""):
         super().__init__(cache_dir=cache_dir)
@@ -112,13 +112,13 @@ class Google_Drive_File_Loader(Base_Loader):
         self.credentials_json = parameters['credentials_json'] if "credentials_json" in parameters else ""
         self.file_content = parameters['file_content'] if "file_content" in parameters else ""
         self.folder_id = parameters['folder_id'] if "folder_id" in parameters else ""
-        
+
     def get_google_drive_service(self):
         credentials = Credentials.from_service_account_info(self.credentials_json, scopes=["https://www.googleapis.com/auth/drive"])
         # Build the Google Drive API client using the access token
         service = build("drive", "v3", credentials=credentials)
-        return service         
-        
+        return service
+
     @measure_time
     def save_data(self, file_content):
         self.file_content = file_content
@@ -128,15 +128,15 @@ class Google_Drive_File_Loader(Base_Loader):
     def get_response_status_code(self):
         return self.save_status_code
 
-    
+
     def get_file_by_name(self, service, file_name, folder_id):
         query = "name='" + file_name + "' and trashed = false and parents in '" + folder_id + "'"
         results = service.files().list(q=query, fields="nextPageToken, files(id, name)").execute()
         items = results.get("files", [])
         if not items:
             return None
-        return items[0]   
-    
+        return items[0]
+
     def save_file_in_folder(self):
         mimeType = ""
         if self.file_name[-4:]=="json":
@@ -153,9 +153,9 @@ class Google_Drive_File_Loader(Base_Loader):
         with open(self.file_name, "w") as file:
             file.write(self.file_content)
 
-        #if file already exists, then overwrite rathert than create a 2nd copy    
+        #if file already exists, then overwrite rathert than create a 2nd copy
         file_id = self.get_file_by_name(self.get_google_drive_service(), self.file_name, self.folder_id)
-        
+
         if file_id:
             #file_metadata['id'] = file_id['id']
             media = MediaFileUpload(self.file_name, mimetype=mimeType)
@@ -163,11 +163,11 @@ class Google_Drive_File_Loader(Base_Loader):
         else:
             print ("creating file")
             media = MediaFileUpload(self.file_name, mimetype=mimeType)
-            file = self.get_google_drive_service().files().create(body=file_metadata, media_body=media, fields="id").execute()    
+            file = self.get_google_drive_service().files().create(body=file_metadata, media_body=media, fields="id").execute()
 
-        print ("returning file")        
-        return file  
-    
+        print ("returning file")
+        return file
+
     def extract_from_web(self):
         self.get_file_content()
         return "200"
@@ -179,7 +179,7 @@ class Google_Drive_File_Loader(Base_Loader):
         credentials_json = json.loads(credentials_string)
         #pretty_json = json.dumps(credentials_json, indent=4)
         #print(pretty_json)
-        return credentials_json   
+        return credentials_json
 
 
 # +
@@ -187,7 +187,7 @@ class Test_Google_Drive_File_Loader(unittest.TestCase):
 
     def test_Google_Drive_Loader(self):
         expected = "hello, first file saved!"
-        
+
         parameters = {
             "folder_id": "1dM-9RcAtT3IRlV_McL7Dw-y1hT5it7Pl",
             "file_name": "Google_Drive_File_Loader_savefile.txt",
@@ -198,9 +198,9 @@ class Test_Google_Drive_File_Loader(unittest.TestCase):
         self.assertEqual(file_content, expected, "Content should be saved to Google Drive")
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
-unittest.main(argv=[''], verbosity=2, exit=False)
+
 # -
 
 
@@ -234,7 +234,7 @@ unittest.main(argv=[''], verbosity=2, exit=False)
 
 # Support function. Needs updating and testing
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 def list_all_directories_files(service):
     # Example API call
@@ -244,7 +244,7 @@ def list_all_directories_files(service):
     # Print the name of the first folder
     if folders:
         for folder in folders:
-            folder_id = folder['id'] 
+            folder_id = folder['id']
             print(f"The first folder is named: {folder}")
             results = service.files().list(q=f"'{folder_id}' in parents", fields="nextPageToken, files(id, name)").execute()
             files = results.get("files", [])

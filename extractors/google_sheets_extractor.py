@@ -291,9 +291,7 @@ class Test_Google_Sheets_Extractor(unittest.TestCase):
         self.assertEqual(sheets_content, expected, "Content should be read from file from Google Drive")
 
 
-logging.basicConfig(level=logging.ERROR)
-
-unittest.main(argv=[''], verbosity=2, exit=False)
+#logging.basicConfig(level=logging.ERROR)
 # -
 
 
@@ -319,7 +317,7 @@ unittest.main(argv=[''], verbosity=2, exit=False)
 
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 
 
