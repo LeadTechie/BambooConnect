@@ -87,7 +87,7 @@ def my_function():
     # Function implementation here
     time.sleep(2)
 
-my_function()
+#my_function()
 
 
 # -
@@ -98,7 +98,7 @@ class Google_Drive_File_Extractor(Base_Extractor):
     parents = []
     mimeType = ""
     credentials_json = ""
-    
+
 
     def __init__(self, request_parameters, cache_dir=""):
         super().__init__(cache_dir=cache_dir)
@@ -111,7 +111,7 @@ class Google_Drive_File_Extractor(Base_Extractor):
         self.parents = parameters['parents'] if "parents" in parameters else []
         self.mimeType = parameters['mimeType'] if "mimeType" in parameters else ""
         self.credentials_json = parameters['credentials_json'] if "credentials_json" in parameters else ""
-     
+
     def get_google_drive_service(self):
         #print(json.dumps(credentials_json, indent=4))
         #service = get_google_drive_service(self.credentials_json)
@@ -126,8 +126,8 @@ class Google_Drive_File_Extractor(Base_Extractor):
 
         # Build the Google Drive API client using the access token
         service = build("drive", "v3", credentials=credentials)
-        return service         
-        
+        return service
+
     @measure_time
     def extract_data(self, cache_key=""):
         logging.debug("0")
@@ -149,7 +149,7 @@ class Google_Drive_File_Extractor(Base_Extractor):
     def get_response_status_code(self):
         return self.extract_status_code
 
-    
+
     def get_file_content(self):
         service = self.get_google_drive_service()
         file = service.files().get(fileId=self.file_id, fields='*').execute()
@@ -161,8 +161,8 @@ class Google_Drive_File_Extractor(Base_Extractor):
         file = service.files().get_media(fileId=self.file_id).execute()
         file_content = file.decode('utf-8')
         self.extract = file_content
-        return file_content    
-    
+        return file_content
+
     def extract_from_web(self):
         self.get_file_content()
         return "200"
@@ -180,7 +180,7 @@ def list_all_directories_files(service):
     # Print the name of the first folder
     if folders:
         for folder in folders:
-            folder_id = folder['id'] 
+            folder_id = folder['id']
             print(f"The first folder is named: {folder}")
             results = service.files().list(q=f"'{folder_id}' in parents", fields="nextPageToken, files(id, name)").execute()
             files = results.get("files", [])
@@ -199,7 +199,7 @@ def list_all_directories_files(service):
 
     folder_id = folders[0]['id'] #"FOLDER_ID"
 
-    # Example API call to list files in the folder    
+    # Example API call to list files in the folder
 
 
 
@@ -212,13 +212,13 @@ def save_file_in_folder(service, folder_id, file_name, file_content):
         mimeType = "application/json"
     else:
         mimeType ="text/plain"
-    
+
     file_metadata = {
         "name": file_name,
         "parents": [folder_id],
         "mimeType": mimeType
     }
-    
+
     with open(file_name, "w") as file:
         file.write(file_content)
 
@@ -230,29 +230,30 @@ def save_file_in_folder(service, folder_id, file_name, file_content):
         file = service.files().update(fileId=file_id['id'], media_body=media).execute()
     else:
         media = MediaFileUpload(file_name, mimetype=mimeType)
-        file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()    
-    
+        file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()
+
     print(f"File ID: {file['id']}")
     return file
- 
+
 def get_file_by_name(service, file_name, folder_id):
     query = "name='" + file_name + "' and trashed = false and parents in '" + folder_id + "'"
     results = service.files().list(q=query, fields="nextPageToken, files(id, name)").execute()
     items = results.get("files", [])
     if not items:
         return None
-    return items[0]    
+    return items[0]
 
-credentials_json = decode_credentials_json()
-#print(json.dumps(credentials_json, indent=4))
-service = get_google_drive_service(credentials_json)
-list_all_directories_files(service)
-file_content = get_file_content("1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R")
-print(file_content)
+def test_google_drive_data():
+    credentials_json = decode_credentials_json()
+    #print(json.dumps(credentials_json, indent=4))
+    service = get_google_drive_service(credentials_json)
+    list_all_directories_files(service)
+    file_content = get_file_content("1GoXl2a3tsvJfvTqUYh3p4Dw2a1e7Pc0R")
+    print(file_content)
 
-folder_id="1Ba27PI1No-5wkzEaop4zfKrcLZiB_-9z"
-save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here and has been updated")
-    
+    folder_id="1Ba27PI1No-5wkzEaop4zfKrcLZiB_-9z"
+    save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here and has been updated")
+
 # -
 
     def decode_credentials_json():
@@ -260,7 +261,7 @@ save_file_in_folder(service, folder_id, "first_saved_file.txt", "Content is here
         credentials_json = json.loads(credentials_string)
         #pretty_json = json.dumps(credentials_json, indent=4)
         #print(pretty_json)
-        return credentials_json   
+        return credentials_json
 
 
 # +
@@ -268,7 +269,7 @@ class Test_Google_Drive_File_Extractor(unittest.TestCase):
 
     def test_Google_Drive_Extractor(self):
         expected = "Content is here and has been updated"
-        
+
         parameters = {
             "file_id": "11ZsvQpq12yG-re9sTVkhtykl7CnD966t",
             "credentials_json": decode_credentials_json()
@@ -278,9 +279,9 @@ class Test_Google_Drive_File_Extractor(unittest.TestCase):
         self.assertEqual(file_content, expected, "Content should be read from file from Google Drive")
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
-unittest.main(argv=[''], verbosity=2, exit=False)
+#unittest.main(argv=[''], verbosity=2, exit=False)
 # -
 
 
@@ -306,7 +307,7 @@ unittest.main(argv=[''], verbosity=2, exit=False)
 
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 
 

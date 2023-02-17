@@ -82,7 +82,7 @@ def my_function():
     # Function implementation here
     time.sleep(2)
 
-my_function()
+#my_function()
 # -
 
 
@@ -160,7 +160,7 @@ def generate_params_for_jira_component_list(email, token):
 
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 
 # +
@@ -193,9 +193,9 @@ class Test_Request_Extractor(unittest.TestCase):
         self.assertEqual(re_json, expected, "check getting from in file cache")
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
-unittest.main(argv=[''], verbosity=2, exit=False)
+#unittest.main(argv=[''], verbosity=2, exit=False)
 # -
 
 
@@ -237,7 +237,7 @@ def test_repeated_calls_to_check_cache():
     pretty_json = json.dumps(components_json, indent=4)
     print(pretty_json)
 
-test_repeated_calls_to_check_cache()
+#test_repeated_calls_to_check_cache()
 # -
 
 
@@ -299,9 +299,9 @@ class Test_Extract_Component_List(unittest.TestCase):
         self.assertEqual(re_components_json[0], expected, "check first component")
 
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
-unittest.main(argv=[''], verbosity=2, exit=False)
+#unittest.main(argv=[''], verbosity=2, exit=False)
 
 # +
 
