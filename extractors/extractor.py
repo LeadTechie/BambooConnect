@@ -82,7 +82,7 @@ def my_function():
     # Function implementation here
     time.sleep(2)
 
-my_function()
+#my_function()
 # -
 
 
@@ -297,11 +297,6 @@ class Test_Extract_Component_List(unittest.TestCase):
 
         pretty_json = json.dumps(re_components_json, indent=4)
         self.assertEqual(re_components_json[0], expected, "check first component")
-
-
-#logging.basicConfig(level=logging.ERROR)
-
-#unittest.main(argv=[''], verbosity=2, exit=False)
 
 # +
 
