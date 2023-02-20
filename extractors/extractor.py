@@ -237,7 +237,7 @@ def test_repeated_calls_to_check_cache():
     pretty_json = json.dumps(components_json, indent=4)
     print(pretty_json)
 
-test_repeated_calls_to_check_cache()
+#test_repeated_calls_to_check_cache()
 # -
 
 
@@ -297,7 +297,6 @@ class Test_Extract_Component_List(unittest.TestCase):
 
         pretty_json = json.dumps(re_components_json, indent=4)
         self.assertEqual(re_components_json[0], expected, "check first component")
-
 
 # +
 
