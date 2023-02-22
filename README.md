@@ -72,6 +72,25 @@ jupytext --to notebook google_sheets_extractor.py
 jupytext --set-formats ipynb,py google_sheets_extractor.ipynb
 jupytext --sync google_sheets_extractor.ipynb
 
+
+
+jupytext --to notebook loaders/google_drive_file_loader.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
+jupytext --sync loaders/google_drive_file_loader.ipynb
+
+jupytext --to notebook test/end2end/test_e2e_google_drive_file_loader.py
+jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_loader.ipynb
+jupytext --sync test/end2end/test_e2e_google_drive_file_loader.ipynb
+
+jupytext --to notebook loaders/google_drive_file_extractor.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_extractor.ipynb
+jupytext --sync loaders/google_drive_file_extractor.ipynb
+
+jupytext --to notebook test/end2end/test_e2e_google_drive_file_extractor.py
+jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_extractor.ipynb
+jupytext --sync test/end2end/test_e2e_google_drive_file_extractor.ipynb
+
+
 ```
 
 

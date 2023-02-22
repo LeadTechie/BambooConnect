@@ -2,7 +2,7 @@
 # jupyter:
 #   jupytext:
 #     cell_metadata_filter: -all
-#     formats: ipynb,py
+#     formats: ipynb,py:light
 #     text_representation:
 #       extension: .py
 #       format_name: light
@@ -28,14 +28,19 @@ import googleapiclient.discovery
 from googleapiclient.http import MediaFileUpload
 import unittest
 import logging
-
+import httplib2
 from googleapiclient.discovery import build
-#from google.oauth2.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
-import json
+import support.authentication_support as auth_support
+
 # -
+# #!pip uninstall bamboo_connect -y
 
 
+
+# +
+# #!pip install bamboo_connect
+# -
 
 class Base_Extractor():
     cache_dir=""
@@ -103,15 +108,18 @@ class Google_Drive_File_Extractor(Base_Extractor):
     def __init__(self, request_parameters, cache_dir=""):
         super().__init__(cache_dir=cache_dir)
         self.load_request_parameters(request_parameters)
+        logging.basicConfig(level=logging.DEBUG)
         logging.debug("Request_Connector")
 
+        
     def load_request_parameters(self, parameters):
         self.file_id = parameters['file_id'] if "file_id" in parameters else ""
+        self.folder_id = parameters['folder_id'] if "folder_id" in parameters else ""
         self.file_name = parameters['file_name'] if "file_name" in parameters else ""
         self.parents = parameters['parents'] if "parents" in parameters else []
         self.mimeType = parameters['mimeType'] if "mimeType" in parameters else ""
         self.credentials_json = parameters['credentials_json'] if "credentials_json" in parameters else ""
-
+        
     def get_google_drive_service(self):
         #print(json.dumps(credentials_json, indent=4))
         #service = get_google_drive_service(self.credentials_json)
@@ -152,20 +160,32 @@ class Google_Drive_File_Extractor(Base_Extractor):
 
     def get_file_content(self):
         service = self.get_google_drive_service()
-        file = service.files().get(fileId=self.file_id, fields='*').execute()
 
-        # Get the content of the file as a string
-        file_content = file.get('content')
-        #print(json.dumps(file, indent=4))
+        query = f"'{self.folder_id}' in parents and name='{self.file_name}'"
+        results = service.files().list(q=query, fields="files(id)").execute()
+        items = results.get("files", [])
+        if not items:
+            print(f"No file found with name '{file_name}' in folder with ID '{folder_id}'")
+            return ""
 
-        file = service.files().get_media(fileId=self.file_id).execute()
-        file_content = file.decode('utf-8')
+        # Get the content of the first file matching the query
+        file_id = items[0]["id"]
+        file = service.files().get_media(fileId=file_id).execute()
+        file_content = file.decode("utf-8")
         self.extract = file_content
-        return file_content
+        return file_content        
+        
 
     def extract_from_web(self):
         self.get_file_content()
         return "200"
+
+    
+
+
+
+
+
 
 # +
 
@@ -225,6 +245,8 @@ def save_file_in_folder(service, folder_id, file_name, file_content):
     file_id = get_file_by_name(service, file_name, folder_id)
 
     if file_id:
+        print("file_id")
+        print(file_id)
         #file_metadata['id'] = file_id['id']
         media = MediaFileUpload(file_name, mimetype=mimeType)
         file = service.files().update(fileId=file_id['id'], media_body=media).execute()
@@ -256,76 +278,6 @@ def test_google_drive_data():
 
 # -
 
-    def decode_credentials_json():
-        credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
-        credentials_json = json.loads(credentials_string)
-        #pretty_json = json.dumps(credentials_json, indent=4)
-        #print(pretty_json)
-        return credentials_json
-
-
-# +
-class Test_Google_Drive_File_Extractor(unittest.TestCase):
-
-    def test_Google_Drive_Extractor(self):
-        expected = "Content is here and has been updated"
-
-        parameters = {
-            "file_id": "11ZsvQpq12yG-re9sTVkhtykl7CnD966t",
-            "credentials_json": decode_credentials_json()
-        }
-        gdfe = Google_Drive_File_Extractor(parameters,"test_data")
-        file_content = gdfe.extract_data("first_saved_file.txt")
-        self.assertEqual(file_content, expected, "Content should be read from file from Google Drive")
-
-
-#logging.basicConfig(level=logging.ERROR)
-
-#unittest.main(argv=[''], verbosity=2, exit=False)
-# -
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#logging.basicConfig(level=logging.ERROR)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -333,9 +285,5 @@ class Test_Google_Drive_File_Extractor(unittest.TestCase):
 
 # +
 
-if __name__ == "__main__":
-    unittest.main(argv=[''], verbosity=2, exit=False)
-# -
+#if __name__ == "__main__":
 
-# from transform.recon_dataset import Recon_DataSet
-# from transform import data_translations
