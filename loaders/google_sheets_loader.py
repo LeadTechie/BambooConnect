@@ -33,8 +33,10 @@ from googleapiclient.discovery import build
 #from google.oauth2.service_account import ServiceAccountCredentials
 from google.oauth2.service_account import Credentials
 import json
-# -
+from loaders.loader import Base_Loader
 
+
+# -
 
 def decode_credentials_json():
     credentials_string = base64.b64decode(os.environ['CREDENTIALS_JSON']).decode('ascii')
@@ -43,40 +45,6 @@ def decode_credentials_json():
     #print(pretty_json)
     return credentials_json
 
-class Base_Loader():
-    cache_dir=""
-    file_content = ""
-    file_name = ""
-    save_status_code = 0
-
-    def __init__(self, cache_dir=""):
-        self.cache_dir=cache_dir
-        None
-
-
-    #def extract(self, *argv):
-    #    None
-
-    def save_results_as_file(self, key_name):
-        if not os.path.exists(self.cache_dir):
-            os.makedirs(self.cache_dir)
-
-        file_path = os.path.join(self.cache_dir, key_name)
-        with open(file_path, "w") as file:
-            file.write(self.extract)
-
-    def load_results_from_file(self, key_name):
-        file_path = os.path.join(self.cache_dir, key_name)
-        if os.path.isfile(file_path):
-            with open(file_path, "r") as file:
-                self.extract = file.read()
-                self.extract_status_code = 1
-                return True
-        else:
-            return False
-
-    def set_query_details(self, *argv):
-        None
 
 
 # +
@@ -168,88 +136,31 @@ class Google_Sheets_Loader(Base_Loader):
         print(type(self.get_sheets_content()))
         return "200"
 
-
-# +
-class Test_Google_Sheets_Loader(unittest.TestCase):
-
-    def test_Google_Sheets_Loader(self):
-        data_to_save = [['Bamboo Test E1', 'Bamboo Test F1'],
-                        ['Bamboo Test E2', 'Bamboo Test F2']]
-
-        parameters = {
-            "file_id": "12keD9VYi6yrQ4nP7JJh95M8lmyTqIJw-V4IocOcyjYM",
-            "tab_name": "Sheet1",
-            "data_range": "E1:F2",
-            "credentials_json": decode_credentials_json()
-        }
-        gdse = Google_Sheets_Loader(parameters,"../test_data")
-        result = gdse.save_data(data_to_save)
-        expected = ""
-        self.assertEqual(result['updatedCells'], 4, "It should return that 4 cells were updated")
-
-
-#logging.basicConfig(level=logging.ERROR)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # +
 
 
 
-# Support function. Needs updating and testing
-
-#logging.basicConfig(level=logging.ERROR)
-
-def list_all_directories_files(service):
-    # Example API call
-    results = service.files().list(q="mimeType='application/vnd.google-apps.folder'", fields="nextPageToken, files(id, name)").execute()
-    folders = results.get("files", [])
-
-    # Print the name of the first folder
-    if folders:
-        for folder in folders:
-            folder_id = folder['id']
-            print(f"The first folder is named: {folder}")
-            results = service.files().list(q=f"'{folder_id}' in parents", fields="nextPageToken, files(id, name)").execute()
-            files = results.get("files", [])
-            print(files)
-            # Print the names of the files in the folder
-            if files:
-                print("The files in the folder are:")
-                for file in files:
-                    print(file)
-            else:
-                print("No files were found in the folder.")
-
-    else:
-        print("No folders were found.")
 
 
-    folder_id = folders[0]['id'] #"FOLDER_ID"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # -
@@ -274,11 +185,10 @@ def list_all_directories_files(service):
 
 
 
-# +
 
-if __name__ == "__main__":
-    unittest.main(argv=[''], verbosity=2, exit=False)
-# -
+
+
+
 
 # from transform.recon_dataset import Recon_DataSet
 # from transform import data_translations

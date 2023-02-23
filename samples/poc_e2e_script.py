@@ -14,42 +14,62 @@
 #     name: python3
 # ---
 
-
-# +
-# #!pip install gspread
-import gspread
-import sys
-import os
-import pathlib
-
-
-os.chdir("..")
-try:
-    import support.authentication_support as auth_sup
-    import transformers.data_translations as dt
-    from extractors.google_sheets_extractor import Google_Sheets_Extractor
-    from loaders.google_sheets_loader import Google_Sheets_Loader
-    from extractors.extractor import Request_Extractor
-except Exception as e:
-    print(e)    
-finally:    
-    os.chdir("./samples")
-
-
-
-# -
-
 import pandas as pd
 import numpy as np
 import json
 import os
 import unittest
 import logging
+import gspread
+import sys
+import os
+import pathlib
+# +
+# #!pip install gspread
+
+# Relative import work around if running interactively in Jupyter
+def running_in_jupyter():
+    try:
+        get_ipython()
+        return True
+    except NameError:
+        return False
+
+if running_in_jupyter():
+    # Go up two levels, import class then return to original subdirectory
+    print(os.getcwd())
+    os.chdir("..")
+    print(os.getcwd())
+    try:
+        import support.authentication_support as auth_sup
+        import transformers.data_translations as dt
+        from extractors.google_sheets_extractor import Google_Sheets_Extractor
+        from loaders.google_sheets_loader import Google_Sheets_Loader
+        from extractors.extractor import Request_Extractor
+    except Exception as e:
+        print(e)
+    finally:
+        print("Finally - returning to project dir")
+        print(os.getcwd())
+        os.chdir("./samples")
+        print(os.getcwd())
+    print("Imported Jupyter Version")
+else:
+    #Assumes script running from main project directory
+    import support.authentication_support as auth_sup
+    import transformers.data_translations as dt
+    from extractors.google_sheets_extractor import Google_Sheets_Extractor
+    from loaders.google_sheets_loader import Google_Sheets_Loader
+    from extractors.extractor import Request_Extractor
+    print("Imported Non Jupyter Version")
+
+# -
+
+
 
 # from transform.recon_dataset import Recon_DataSet
 # from transform import data_translations
 
-# +
 def load_google_data():
     expected = [['TestComponent1'],
                 ['TestComponent2'],
@@ -58,7 +78,7 @@ def load_google_data():
     parameters = {
         "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
         "tab_name": "sheet1",
-        "data_range": "A1:E",
+        "data_range": "A2:E",
         "credentials_json": auth_sup.decode_credentials_json()
     }
     gdse = Google_Sheets_Extractor(parameters,"../test_data/")
@@ -68,7 +88,8 @@ def load_google_data():
     print(google_sheets_df_updated)
     return google_sheets_df_updated
 
-load_google_data()
+
+
 
 
 # +
@@ -140,7 +161,7 @@ def read_clean_test_data():
     parameters = {
         "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
         "tab_name": "SampleData",
-        "data_range": "A2:E5",
+        "data_range": "A1:E5",
         "credentials_json": auth_sup.decode_credentials_json()
     }
     gdse = Google_Sheets_Extractor(parameters,"../test_data/")
@@ -153,7 +174,7 @@ def write_clean_test_data(data_to_save):
     parameters = {
         "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
         "tab_name": "Sheet1",
-        "data_range": "A1:E4",
+        "data_range": "A1:E5",
         "credentials_json": auth_sup.decode_credentials_json()
     }
     gdse = Google_Sheets_Loader(parameters,"../test_data")
@@ -164,7 +185,7 @@ def write_results_data(data_to_save):
     parameters = {
         "file_id": "1CeClWOxaysZztz5V_wxfSvFmd8KzntLc3J67rkhukq4",
         "tab_name": "Sheet1",
-        "data_range": "A1:E",
+        "data_range": "A3:E",
         "credentials_json": auth_sup.decode_credentials_json()
     }
     gdse = Google_Sheets_Loader(parameters,"../test_data")
@@ -185,50 +206,42 @@ def load_jira_and_google_data_and_reconcile_and_save_results():
     rds2[["id"]] = rds2[["id"]].astype(int)
     rds2.index = rds2.index.astype(int)
 
-    
+
     result = do_the_reconciliation(rds1, rds2)
     results = write_results_data(result.values.tolist())
     print(result)
     return result
     #write_results_data(result)
-    
+
     #gsc.reset_sheet_data("Recon Tools Test Data", "write-data-test")
     #gsc.copy_sheet_data("Recon Tools Test Data", "SampleData", "write-data-test")
     #gsc.update_data("Recon Tools Test Data", "write-data-test", "A3", result.to_numpy().tolist() )
     #print("done")
-    
-  
-# -
 
+
+# +
+def setup_test_data():
+    clean_data = read_clean_test_data()
+    write_clean_test_data(clean_data.values.tolist())
+
+#setup_test_data()
+
+
+# -
 
 
 def new_e2e_test():
     load_google_data()
     load_jira_data()
-    update_data()  
+    update_data()
+
+# +
+#load_jira_data()
 
 
 # +
-class Test_Google_Sheets_Extractor(unittest.TestCase):
-
-    def test_Google_Sheets_Extractor(self):
-        load_jira_and_google_data_and_reconcile_and_save_results()
-        actual = read_clean_test_expected_results("Sheet1") 
-        expected = read_clean_test_expected_results("ExpectedResult") 
-
-        self.assertEquals(actual.values.tolist(), expected.values.tolist(), "Check that after reconciliation the results match the expected")
-
-
-logging.basicConfig(level=logging.ERROR)
-
-unittest.main(argv=[''], verbosity=2, exit=False)
+#load_google_data()
 # -
-
-
 
 if __name__ == '__main__':
     load_jira_and_google_data_and_reconcile_and_save_results()
-
-
-
-

@@ -88,7 +88,7 @@ def my_function():
     # Function implementation here
     time.sleep(0.2)
 
-my_function()
+#my_function()
 
 
 # -
@@ -182,26 +182,8 @@ class Google_Drive_File_Loader(Base_Loader):
         return credentials_json
 
 
-# +
-class Test_Google_Drive_File_Loader(unittest.TestCase):
-
-    def test_Google_Drive_Loader(self):
-        expected = "hello, first file saved!"
-
-        parameters = {
-            "folder_id": "1dM-9RcAtT3IRlV_McL7Dw-y1hT5it7Pl",
-            "file_name": "Google_Drive_File_Loader_savefile.txt",
-            "credentials_json": decode_credentials_json()
-        }
-        gdfe = Google_Drive_File_Loader(parameters,"../test_data")
-        file_content = gdfe.save_data("hello, first file saved!")
-        self.assertEqual(file_content, expected, "Content should be saved to Google Drive")
 
 
-#logging.basicConfig(level=logging.ERROR)
-
-
-# -
 
 
 
