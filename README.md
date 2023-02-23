@@ -1,4 +1,4 @@
-# Bamboo Connect v0.0.4 Quick Start
+# Bamboo Connect Quick Start
 
 ```
 conda create -n python3-9-12 python=3.9.12 anaconda  
@@ -13,10 +13,12 @@ dev environment:
 export JIRA_TOKEN=<token>
 export JIRA_EMAIL=<email>
 export CREDENTIALS_JSON=<email>
+export BAMBOO_CACHE_PATH=<email>
 
 echo "$JIRA_TOKEN"
 echo "$JIRA_EMAIL"
 echo "$CREDENTIALS_JSON"
+echo "$BAMBOO_CACHE_PATH"
 ```
 
 Generating Tokens:
@@ -28,102 +30,40 @@ pip install notebook
 pip install jupytext
 ```
 
+## Run Tests
 ```
-/Users/chris/Documents/GitHub/BambooConnect/extractors/google_drive_file_extractor.py
-/Users/chris/Documents/GitHub/BambooConnect/
+python -m unittest discover -s test/end2end/ -p 'test_e2e*.py'
+python -m unittest discover -s test/integration/ -p 'test_integration*.py'
+python -m unittest discover -s test/system/ -p 'test_system*.py'
+python -m unittest discover -s test/unit/ -p 'test_unit*.py'
+python -m unittest discover -p 'test_*.py' -t .
 
-Is it wrong file or in wrong directory?
+```
+
+## Run Against Local BambooConnect Code
+```
+pip install -e ./BambooConnect
+```
+## Example Interactive Editing with Jupyter Notebooks
+```
+
+pip install jupytext
+pip install jupyter
+
 jupytext --to notebook extractors/google_drive_file_extractor.py
 jupytext --set-formats ipynb,py extractors/google_drive_file_extractor.ipynb
 jupytext --sync extractors/google_drive_file_extractor.ipynb
 
-jupytext --to notebook loaders/google_drive_file_loader.py
-jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
-jupytext --sync loaders/google_drive_file_loader.ipynb
-
-jupyter notebook
-
-jupytext --to notebook loaders/google_drive_file_extractor.py
-jupytext --set-formats ipynb,py loaders/google_drive_file_extractor.ipynb
-jupytext --sync loaders/google_drive_file_extractor.ipynb
-
-jupyter notebook
-
-jupytext --to notebook loaders/loader.py
-jupytext --set-formats ipynb,py loaders/loader.ipynb
-jupytext --sync loaders/loader.ipynb
-
-jupytext --to notebook loaders/google_sheets_loader.py
-jupytext --set-formats ipynb,py loaders/google_sheets_loader.ipynb
-jupytext --sync loaders/google_sheets_loader.ipynb
-
-jupytext --to notebook loaders/google_drive_file_loader.py
-jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
-jupytext --sync loaders/google_drive_file_loader.ipynb
-
-
-jupytext --to notebook loader.py
-jupytext --set-formats ipynb,py loader.ipynb
-jupytext --sync loader.ipynb
-
-jupytext --to notebook extractor.py
-jupytext --set-formats ipynb,py extractor.ipynb
-jupytext --sync extractor.ipynb
-
-
-
-jupytext --to notebook extractor.py
-jupytext --set-formats ipynb,py extractor.ipynb
-jupytext --sync extractor.ipynb
-
-jupytext --to notebook extract-translate-load-sample.py
-jupytext --set-formats ipynb,py extract-translate-load-sample.ipynb
-jupytext --sync extract-translate-load-sample.ipynb
-
-jupytext --to notebook loader.py
-jupytext --set-formats ipynb,py loader.ipynb
-jupytext --sync loader.ipynb
-
-jupytext --to notebook google_drive_file_extractor.py
-jupytext --set-formats ipynb,py google_drive_file_extractor.ipynb
-jupytext --sync google_drive_file_extractor.ipynb
-
-jupytext --to notebook google_sheets_extractor.py
-jupytext --set-formats ipynb,py google_sheets_extractor.ipynb
-jupytext --sync google_sheets_extractor.ipynb
-
-
-
-jupytext --to notebook loaders/google_drive_file_loader.py
-jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
-jupytext --sync loaders/google_drive_file_loader.ipynb
-
-jupytext --to notebook test/end2end/test_e2e_google_drive_file_loader.py
-jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_loader.ipynb
-jupytext --sync test/end2end/test_e2e_google_drive_file_loader.ipynb
-
-jupytext --to notebook loaders/google_drive_file_extractor.py
-jupytext --set-formats ipynb,py loaders/google_drive_file_extractor.ipynb
-jupytext --sync loaders/google_drive_file_extractor.ipynb
-
-jupytext --to notebook test/end2end/test_e2e_google_drive_file_extractor.py
-jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_extractor.ipynb
-jupytext --sync test/end2end/test_e2e_google_drive_file_extractor.ipynb
-
-
-```
-
-
-```
-jupytext --to notebook test/end2end/test_e2e_google_drive_file_extractor.py
-jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_extractor.ipynb
-jupytext --sync test/end2end/test_e2e_google_drive_file_extractor.ipynb
-
 jupyter notebook
 ```
 
-
-
+## Example Interactive Editing with Jupyter Notebooks
+```
+python jupyter_start.py
+```
+Select . for current subdirectory
+Then enter eg e2e to see just files with e2e
+jupyter notebook will then be started
 
 # Bamboo Connect
 
@@ -220,19 +160,6 @@ python -m unittest discover -s test/system -p 'test_*.py'
 TODO: Currently this requires access to a test JIRA account
 ```
 python poc_test.py
-```
-
-### Running Tests Locally
-```
-python -m unittest discover -p 'test*.py'
-
-python -m unittest discover -s test/unit -p 'test_*.py'
-python -m unittest discover -s test/system -p 'test_*.py'
-python -m unittest discover -s test/integration -p 'test_*.py'
-python -m unittest discover -s test/end2end -p 'test_*.py'
-
-python poc_test.py
-
 ```
 
 ### Py Recon Tools Docs
