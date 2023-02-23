@@ -22,7 +22,7 @@ class Test_Unit_Data_Translations(unittest.TestCase):
         sample_data = [[0, 1, 1], ['time', 'id', 'b'], [0, 1, 1], [0, 2, 3], [0, 2, 3], [0, 2, 3]]
         df = pd.DataFrame(sample_data)
         dt.print_debug(df)
-        df = dt.process_component_sheets_data(df)
+        df = dt.process_component_sheets_data3(df)
         dt.print_debug(df)
 
 
