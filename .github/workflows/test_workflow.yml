@@ -22,17 +22,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install -e .
 
       - name: execute all tests for project
         env:
           CREDENTIALS_JSON: ${{ secrets.CREDENTIALS_JSON }}
-          RECON_TOOLS_JIRA_EMAIL: ${{ secrets.RECON_TOOLS_JIRA_EMAIL }}
+          JIRA_EMAIL: ${{ secrets.RECON_TOOLS_JIRA_EMAIL }}
           RECON_TOOLS_JIRA_SERVER: ${{ secrets.RECON_TOOLS_JIRA_SERVER }}
-          RECON_TOOLS_JIRA_TOKEN: ${{ secrets.RECON_TOOLS_JIRA_TOKEN }}
+          JIRA_TOKEN: ${{ secrets.RECON_TOOLS_JIRA_TOKEN }}
         run: |
-          python -m unittest discover -s test/unit -p 'test_*.py'
-          python -m unittest discover -s test/system -p 'test_*.py'
-          python -m unittest discover -s test/integration -p 'test_*.py'
-          python -m unittest discover -s test/end2end -p 'test_*.py'
-
-          python poc_test.py
+          python -m unittest discover -s test/end2end/ -p 'test_e2e*.py'
+          python -m unittest discover -s test/integration/ -p 'test_integration*.py'
+          python -m unittest discover -s test/system/ -p 'test_system*.py'
+          python -m unittest discover -s test/unit/ -p 'test_unit*.py'
