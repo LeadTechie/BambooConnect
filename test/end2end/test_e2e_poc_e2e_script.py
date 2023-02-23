@@ -42,21 +42,21 @@ def running_in_jupyter():
 if running_in_jupyter():
     # Go up two levels, import class then return to original subdirectory
     print(os.getcwd())
-    os.chdir("../../samples")
+    os.chdir("../..")
     print(os.getcwd())
     try:
-        import poc_e2e_script as poc_e2e
+        import samples.poc_e2e_script as poc_e2e
     except Exception as e:
         print(e)
     finally:
         print("Finally - returning to project dir")
         print(os.getcwd())
-        os.chdir("../test/end2end")
+        os.chdir("test/end2end")
     print(os.getcwd())
     print("Imported Jupyter Version")
 else:
     #Assumes script running from main project directory
-    import poc_e2e_script as poc_e2e
+    import samples.poc_e2e_script as poc_e2e
     print("Imported Non Jupyter Version")
 
 
@@ -82,5 +82,4 @@ class Test_e2e_poc_recon(unittest.TestCase):
 
 if __name__ == '__main__':
     #logging.basicConfig(level=logging.ERROR)
-    unittest.main(argv=[''], verbosity=2, exit=False)    
-
+    unittest.main(argv=[''], verbosity=2, exit=False)
