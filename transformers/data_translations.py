@@ -27,7 +27,13 @@ def drop_first_column(df):
 def process_component_sheets_data(df):
     #df = df[1:] # remove first info line
     df = make_first_row_header(df)
-    print("DEBUG TODAY")
+    print(df)
+    df = standardise_component_data(df)
+    return df
+
+def process_component_sheets_data3(df):
+    df = df[1:] # remove first info line
+    df = make_first_row_header(df)
     print(df)
     df = standardise_component_data(df)
     return df
