@@ -44,7 +44,8 @@ if running_in_jupyter():
     print("Imported Jupyter Version")
 else:
     #Assumes script running from main project directory
-    import Google_Drive_File_Loader
+    import support.authentication_support as auth_support
+    from loaders.google_drive_file_loader import Google_Drive_File_Loader
     print("Imported Non Jupyter Version")
 # -
 
@@ -63,7 +64,7 @@ class Test_Google_Drive_File_Loader(unittest.TestCase):
         gdfl = Google_Drive_File_Loader(parameters,"../test_data")
         file_content = gdfl.save_data("hello, first file saved!")
         self.assertEqual(file_content, expected, "Content should be saved to Google Drive")
-        
+
         #get_file_by_name: Google_Drive_File_Loader_savefile.txt
 
 

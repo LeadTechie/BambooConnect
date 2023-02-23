@@ -34,7 +34,7 @@ if running_in_jupyter():
     # Go up two levels, import class then return to original subdirectory
     print(os.getcwd())
     os.chdir("../..")
-    print(os.getcwd())    
+    print(os.getcwd())
     try:
         import support.authentication_support as auth_support
         from extractors.google_drive_file_extractor import Google_Drive_File_Extractor
@@ -49,7 +49,8 @@ if running_in_jupyter():
     print("Imported Jupyter Version")
 else:
     #Assumes script running from main project directory
-    import Google_Drive_File_Loader
+    import support.authentication_support as auth_support
+    from extractors.google_drive_file_extractor import Google_Drive_File_Extractor
     print("Imported Non Jupyter Version")
 # -
 
@@ -61,8 +62,8 @@ class Test_Google_Drive_File_Extractor(unittest.TestCase):
     def test_Google_Drive_Extractor(self):
         expected = "hello, first file saved!"
 
-        #https://drive.google.com/file/d/1rAVjKMKPSytsOfFzZsCpOk2l2OaN25em/view?usp=share_link        
-        
+        #https://drive.google.com/file/d/1rAVjKMKPSytsOfFzZsCpOk2l2OaN25em/view?usp=share_link
+
         parameters = {
             "folder_id": "1dM-9RcAtT3IRlV_McL7Dw-y1hT5it7Pl",
             "file_name": "Google_Drive_File_Loader_savefile.txt",
@@ -76,12 +77,12 @@ class Test_Google_Drive_File_Extractor(unittest.TestCase):
         self.assertEqual(file_content, expected, "Content should be loaded from Google Drive")
 
         #get_file_by_name: Google_Drive_File_Loader_savefile.txt
-            
-            
-        
+
+
+
 #logging.basicConfig(filename='debug.log', level=logging.DEBUG)
 #logging.basicConfig(filename='debug.log', level=logging.DEBUG)
-#unittest.main(argv=[''], verbosity=2, exit=False) 
+#unittest.main(argv=[''], verbosity=2, exit=False)
 
 # +
 #unittest.main()
