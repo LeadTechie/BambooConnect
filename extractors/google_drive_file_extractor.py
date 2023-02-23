@@ -34,7 +34,7 @@ from google.oauth2.service_account import Credentials
 import support.authentication_support as auth_support
 
 # -
-# #!pip uninstall bamboo_connect -y
+# # !pip uninstall bamboo_connect -y
 
 
 

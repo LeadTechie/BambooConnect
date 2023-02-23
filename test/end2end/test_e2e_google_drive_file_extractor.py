@@ -18,7 +18,7 @@ import unittest
 import os
 import json
 
-# #!pip uninstall bamboo_connect -y
+# # !pip uninstall bamboo_connect -y
 
 
 # +

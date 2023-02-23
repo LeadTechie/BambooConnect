@@ -29,6 +29,26 @@ pip install jupytext
 ```
 
 ```
+/Users/chris/Documents/GitHub/BambooConnect/extractors/google_drive_file_extractor.py
+/Users/chris/Documents/GitHub/BambooConnect/
+
+Is it wrong file or in wrong directory?
+jupytext --to notebook extractors/google_drive_file_extractor.py
+jupytext --set-formats ipynb,py extractors/google_drive_file_extractor.ipynb
+jupytext --sync extractors/google_drive_file_extractor.ipynb
+
+jupytext --to notebook loaders/google_drive_file_loader.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_loader.ipynb
+jupytext --sync loaders/google_drive_file_loader.ipynb
+
+jupyter notebook
+
+jupytext --to notebook loaders/google_drive_file_extractor.py
+jupytext --set-formats ipynb,py loaders/google_drive_file_extractor.ipynb
+jupytext --sync loaders/google_drive_file_extractor.ipynb
+
+jupyter notebook
+
 jupytext --to notebook loaders/loader.py
 jupytext --set-formats ipynb,py loaders/loader.ipynb
 jupytext --sync loaders/loader.ipynb
@@ -95,6 +115,10 @@ jupytext --sync test/end2end/test_e2e_google_drive_file_extractor.ipynb
 
 
 ```
+jupytext --to notebook test/end2end/test_e2e_google_drive_file_extractor.py
+jupytext --set-formats ipynb,py test/end2end/test_e2e_google_drive_file_extractor.ipynb
+jupytext --sync test/end2end/test_e2e_google_drive_file_extractor.ipynb
+
 jupyter notebook
 ```
 
