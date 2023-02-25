@@ -93,8 +93,14 @@ class Request_Extractor(Base_Extractor):
     url = "https://jsonplaceholder.typicode.com/todos/1"
     post_type="GET"
     auth = None
+    params = {}
+    json_data = None
 
     response = None
+
+    #quickc check to ensure that latest local version is in use when developing
+    def test_version(self):
+        return "test_version"
 
     def __init__(self, request_parameters, cache_dir=""):
         super().__init__(cache_dir=cache_dir)
@@ -107,6 +113,9 @@ class Request_Extractor(Base_Extractor):
         self.url = request_parameters['url'] if "url" in request_parameters else "https://jsonplaceholder.typicode.com/todos/1"
         self.post_type=request_parameters['post_type'] if "url" in request_parameters else "GET"
         self.auth=request_parameters['auth'] if "auth" in request_parameters else None
+        self.params = request_parameters['params'] if "params" in request_parameters else {}
+        self.json_data = request_parameters['json_data'] if "json_data" in request_parameters else {}
+
 
     @measure_time
     def extract_data(self, cache_key=""):
@@ -130,7 +139,7 @@ class Request_Extractor(Base_Extractor):
         return self.extract_status_code
 
     def extract_from_web(self):
-        response = requests.request(self.post_type, self.url, headers=self.headers, auth=self.auth, data=self.data)
+        response = requests.request(self.post_type, self.url, headers=self.headers, auth=self.auth, data=self.data, json=self.json_data, params=self.params)
         self.extract_status_code = response.status_code
         self.extract = response.content.decode()
         logging.debug("extract_from_web" + self.extract)
