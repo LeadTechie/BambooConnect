@@ -94,13 +94,13 @@ class Request_Extractor(Base_Extractor):
     post_type="GET"
     auth = None
     params = {}
-    json_data = None
+    json_data = {}
 
     response = None
 
     #quickc check to ensure that latest local version is in use when developing
     def test_version(self):
-        return "test_version"
+        return "test_version 1"
 
     def __init__(self, request_parameters, cache_dir=""):
         super().__init__(cache_dir=cache_dir)
