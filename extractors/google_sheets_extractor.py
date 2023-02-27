@@ -102,7 +102,7 @@ def my_function():
     # Function implementation here
     time.sleep(2)
 
-my_function()
+#my_function()
 
 
 # -
