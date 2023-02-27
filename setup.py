@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'bamboo_connect',         # How you named your package folder (MyLib)
   packages = ['bamboo_connect','extractors','loaders','samples','support','transformers'],   # Chose the same as "name"
-  version = '0.0.8',      # Start with a small number and increase it with every change you make
+  version = '0.0.9',      # Start with a small number and increase it with every change you make
   license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
   description = 'Bamboo Connect is a lightweight ETL (Extract, Transform, Load) library with examples and templates. It enables developers to quickly extract, transform, reconcile and then load resulting data securely. This avoids time consuming manual error prone tasks.',   # Give a short description about your library
   author = 'Chris Rowe',                   # Type in your name
