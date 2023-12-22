@@ -1,3 +1,17 @@
+# Note: This prooject is no longer supported
+
+To quote Michael Nygard from Craft Conference, 2023 talk: https://youtu.be/55qSt0PsU_0?si=VF5jJc3ycESM7xDA
+```
+Building an abstraction layer is like buying an option:
+* Those options are not often exercised
+* It’s likely that whatever your abstraction layer is it will be a poor representation of what’s underneath it and it won’t be general enough to support the next new thing you want to swap in.
+```
+-> Therefore think very carefully about building one at start
+
+Should have watched this first, but it was fun building it out as PoC!
+
+
+
 # Bamboo Connect Quick Start
 
 ```
